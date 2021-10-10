@@ -16,6 +16,31 @@ Compilation : `cmake --build ./cmake-build-debug/ --target all`
 windows : `./cmake-build-debug/Malloc-World.exe`  
 linux : `./cmake-build-debug/Malloc-World`
 
+## Utilisation de git
+
+### Commandes de base
+
+`git commit -a -m "{message}"` simple commit |
+_toujours mettre un message et en anglais si possible !!_ 
+
+`git add {filename}` ajoute un ficher ou dosser a git
+
+`git push` publie ses modifs sur github
+
+### Manipulations de branches
+
+Pour des fonctionnalitées test ou du code qui casserai le programme, il est conseillé de créer une branche.
+
+`git branch` affiche les branches 
+
+`git branch {branch name}` créer une branche 
+
+`git checkout {branch name}` change de branche 
+
+`git merge {branch name}` fusionne 2 branches
+
+`git branch -d {branch name}` supprime une branche
+
 ## Règles
 
 Bienvenue à toi jeune aventurier. Me voilà à tes côtés pour te guider à travers la quête
