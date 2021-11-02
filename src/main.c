@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include "save.h"
-#include "map.h"
+#include "../headers/main.h"
 
 int main() {
 
@@ -8,6 +6,9 @@ int main() {
     worldMap = createMap(0,20);
 
     displayMap(*worldMap);
+
+    saveData(*worldMap);
+
     destroyMap(worldMap);
     return 0;
 }

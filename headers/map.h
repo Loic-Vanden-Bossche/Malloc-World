@@ -9,13 +9,9 @@
 #include "stdio.h"
 
 typedef struct Map {
-
     int currentLvl;
-
     int mapSize;
-
     int ***lvl;
-
 } map;
 
 map *createMap(int startLvl, int mapSize);

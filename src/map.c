@@ -2,7 +2,7 @@
 // Created by Loïc Vanden Bossche on 02/11/2021.
 //
 
-#include "map.h"
+#include "../headers/map.h"
 
 map *createMap(int startLvl, int mapSize) {
 
