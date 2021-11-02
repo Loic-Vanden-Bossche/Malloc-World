@@ -3,4 +3,7 @@ project(Malloc-World C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Malloc-World main.c)
+set(Sources main.c save-parser.c)
+set(Headers save-parser.h map.c map.h)
+
+add_executable(Malloc-World ${Sources} ${Headers})
