@@ -8,5 +8,6 @@
 #include <stdio.h>
 #include "./save.h"
 #include "./map.h"
+#include "./player.h"
 
 #endif //MALLOC_WORLD_MAIN_H

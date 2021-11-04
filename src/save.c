@@ -4,13 +4,13 @@
 
 #include "../headers/save.h"
 
+const char* SAVE_FILE_LOCATION = "../saveFile.txt";
+
 void parseSaveFile(){
 
     FILE *f;
 
     f = fopen("./saveFileTEST.txt","r");
-
-
 
     fclose(f);
 }
@@ -19,7 +19,7 @@ void saveData(map worldMap) {
 
     FILE *f;
 
-    f = fopen("./saveFile.txt","w");
+    f = fopen(SAVE_FILE_LOCATION,"w");
 
     fprintf(f,"=== MAP ===");
 

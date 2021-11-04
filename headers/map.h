@@ -14,7 +14,7 @@ typedef struct Map {
     int ***lvl;
 } map;
 
-map *createMap(int startLvl, int mapSize);
+map* createMap(int startLvl, int mapSize);
 
 void destroyMap(map *worldMap);
 
