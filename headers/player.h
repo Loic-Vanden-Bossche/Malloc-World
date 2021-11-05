@@ -7,11 +7,7 @@
 
 #include "stdlib.h"
 #include "stdio.h"
-
-typedef struct Item {
-    int id;
-    int qty;
-} item;
+#include "item.h"
 
 typedef struct Player {
     char name[20];
