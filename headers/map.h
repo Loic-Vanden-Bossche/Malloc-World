@@ -8,11 +8,22 @@
 #include "stdlib.h"
 #include "stdio.h"
 
+typedef struct MapElement {
+
+  int value;
+  char *name;
+  int avaliableZones[3];
+
+} mapElement;
+
 typedef struct Map {
     int currentLvl;
     int mapSize;
     int ***lvl;
 } map;
+
+const mapElement* getMapElements();
+int elementIsInLvl(mapElement element, int targetLvl);
 
 map* createMap(int startLvl, int mapSize);
 
