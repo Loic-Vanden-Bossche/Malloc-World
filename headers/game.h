@@ -9,6 +9,7 @@
 #include "./save.h"
 #include "./map.h"
 #include "./player.h"
+#include "storage.h"
 
 #define clrscr() printf("\e[1;1H\e[2J")
 

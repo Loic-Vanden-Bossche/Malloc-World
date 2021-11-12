@@ -7,10 +7,11 @@
 
 #include "map.h"
 #include "player.h"
-#include "stdio.h"
+#include "storage.h"
+#include <stdio.h>
 
-void parseSaveFile();
+void parseSaveFile(map* worldMap, player* player, storageNode* storage);
 
-void saveData(map* worldMap, player* player);
+void saveData(map* worldMap, player* player, storageNode* storage);
 
 #endif //MALLOC_WORLD_SAVE_H
