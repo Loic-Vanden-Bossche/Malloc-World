@@ -2,13 +2,23 @@
 
 int main() {
 
-    map *worldMap;
-    worldMap = createMap(0,20);
+    int exit = 0;
 
-    displayMap(*worldMap);
+    while(!exit){
 
-    saveData(*worldMap);
+        switch (mainMenu()) {
+            case 1:
+                game();
+                break;
+            case 2:
+                if(displayConfirm("Êtes-vous sur d'écraser votre sauvegarde actuelle ?"))
+                    newGame();
+                break;
+            case 3:
+                exit = displayConfirm("Êtes-vous sur de vouloir quitter le jeu ?");
+                break;
+        }
+    }
 
-    destroyMap(worldMap);
     return 0;
 }

@@ -25,10 +25,10 @@ typedef struct Map {
 const mapElement* getMapElements();
 int elementIsInLvl(mapElement element, int targetLvl);
 
-map* createMap(int startLvl, int mapSize);
+map* createMap(int startLvl);
 
-void destroyMap(map *worldMap);
+void destroyMap(map* worldMap);
 
-void displayMap(map worldMap);
+void displayMap(map* worldMap);
 
 #endif //MALLOC_WORLD_MAP_H

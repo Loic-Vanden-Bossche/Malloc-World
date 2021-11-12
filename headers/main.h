@@ -6,8 +6,6 @@
 #define MALLOC_WORLD_MAIN_H
 
 #include <stdio.h>
-#include "./save.h"
-#include "./map.h"
-#include "./player.h"
+#include "game.h"
 
 #endif //MALLOC_WORLD_MAIN_H

@@ -11,20 +11,25 @@ player* createPlayer() {
 
     player *newPlayer = malloc(sizeof(player));
 
-    //newPlayer->inventory;
-
     newPlayer->lvl = 1;
-    newPlayer->hp = 100;
+    newPlayer->hp = MAX_PLAYER_HP;
+    newPlayer->maxHp = MAX_PLAYER_HP;
     newPlayer->xp = 0;
+
+    for (int i = 0; i < 10; ++i) {
+        newPlayer->inventory[i].id = 0;
+        newPlayer->inventory[i].qty = 0;
+        newPlayer->inventory[i].durabitity = 0;
+    }
 
     return newPlayer;
 }
 
-void displayPlayerInfos(player player){
+void displayPlayerInfos(player* player){
 
-    printf("HP: %d/%d\n", player.hp, player.maxHp);
-    printf("XP: %d\n", player.xp);
-    printf("LVL: %d\n", player.lvl);
+    printf("HP: %d/%d\n", player->hp, player->maxHp);
+    printf("XP: %d\n", player->xp);
+    printf("LVL: %d\n", player->lvl);
 }
 
 void applyHp(player *player, int hp){
