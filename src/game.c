@@ -53,6 +53,7 @@ int game() {
 
     map *worldMap = createMap(0);
     player* player = createPlayer();
+    storageNode* storage = NULL;
 
     int ch = -1;
 
@@ -79,7 +80,7 @@ int game() {
         }
     } while ((ch = getch()) != 27);
 
-    saveData(worldMap, player);
+    saveData(worldMap, player, storage);
 
     destroyMap(worldMap);
 

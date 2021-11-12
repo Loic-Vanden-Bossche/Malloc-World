@@ -6,7 +6,7 @@
 
 const char* SAVE_FILE_LOCATION = "../saveFile.txt";
 
-void parseSaveFile(){
+void parseSaveFile(map* worldMap, player* player, storageNode* storage){
 
     FILE *f;
 
@@ -15,7 +15,7 @@ void parseSaveFile(){
     fclose(f);
 }
 
-void saveData(map* worldMap, player* player) {
+void saveData(map* worldMap, player* player, storageNode* storage) {
 
     FILE *f;
 
@@ -46,6 +46,13 @@ void saveData(map* worldMap, player* player) {
         const item item = player->inventory[i];
 
         fprintf(f,"{%d}@{%d}@{%d}\n", item.qty, item.id, item.durabitity);
+    }
+
+    fprintf(f,"-- STORAGE --\n");
+
+    while (storage != NULL) {
+        fprintf(f, "{%d}@{%d}@{%d}\n", storage->item.qty, storage->item.id, storage->item.durabitity);
+        storage = storage->next;
     }
 
     fclose(f);
