@@ -25,11 +25,26 @@ player* createPlayer() {
     return newPlayer;
 }
 
+void displayPlayerInventory(player* player){
+
+    printf("Player inventory : \n");
+
+    for (int i = 0; i < 10; ++i) {
+        printf("id : %d, qty : %d, d : %d\n",
+               player->inventory[i].id,
+               player->inventory[i].qty,
+               player->inventory[i].durabitity
+               );
+    }
+}
+
 void displayPlayerInfos(player* player){
 
     printf("HP: %d/%d\n", player->hp, player->maxHp);
     printf("XP: %d\n", player->xp);
     printf("LVL: %d\n", player->lvl);
+
+    displayPlayerInventory(player);
 }
 
 void applyHp(player *player, int hp){

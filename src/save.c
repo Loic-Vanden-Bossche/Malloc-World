@@ -6,11 +6,114 @@
 
 const char* SAVE_FILE_LOCATION = "../saveFile.txt";
 
-void parseSaveFile(map* worldMap, player* player, storageNode* storage){
+const int BUFFER_LENGTH = 255;
+
+void parseMapData(FILE * f, map* worldMap){
+
+    char* buffer = malloc(BUFFER_LENGTH);
+
+    // Skip main title line
+    fgets(buffer, BUFFER_LENGTH, f);
+
+    for (int lvl = 0; lvl < 3; ++lvl) {
+
+        // Skip title line
+        fgets(buffer, BUFFER_LENGTH, f);
+
+        // Getting map infos for lvl
+        for (int i = 0; i < worldMap->mapSize; ++i) {
+            fgets(buffer, BUFFER_LENGTH, f);
+
+            char* strToken = strtok (buffer, " ");
+
+            int tokCount = 0;
+
+            while (strToken != NULL) {
+                worldMap->lvl[lvl][i][tokCount] = atoi(strToken);
+
+                tokCount++;
+
+                if(tokCount > worldMap->mapSize) break;
+
+                strToken = strtok(NULL, " ");
+            }
+        }
+    }
+
+    free(buffer);
+}
+
+void parsePlayerData(FILE * f, player* player) {
+
+    char* buffer = malloc(BUFFER_LENGTH);
+
+    // Skip main title line
+    fgets(buffer, BUFFER_LENGTH, f);
+    fgets(buffer, BUFFER_LENGTH, f);
+
+    // Getting player lvl
+    fgets(buffer, BUFFER_LENGTH, f);
+    sscanf(buffer,"{%d}", &player->lvl);
+
+    // Getting player HPs
+    fgets(buffer, BUFFER_LENGTH, f);
+    sscanf(buffer,"{%d/%d}", &player->hp, &player->maxHp);
+
+    // Getting player XPs
+    fgets(buffer, BUFFER_LENGTH, f);
+    sscanf(buffer,"{%d/}", &player->xp);
+
+    // Getting player inventory
+    // Skip title line
+    fgets(buffer, BUFFER_LENGTH, f);
+    for (int i = 0; i < 10; ++i) {
+        fgets(buffer, BUFFER_LENGTH, f);
+        sscanf(buffer, "{%d}@{%d}@{%d}",
+               &player->inventory[i].qty,
+               &player->inventory[i].id,
+               &player->inventory[i].durabitity
+               );
+    }
+
+    free(buffer);
+}
+
+void parseStorageData(FILE *f, storageNode** storage) {
+
+    char* buffer = malloc(BUFFER_LENGTH);
+
+    // Skip title line
+    fgets(buffer, BUFFER_LENGTH, f);
+
+    // Getting items in storage
+    while(fgets(buffer, BUFFER_LENGTH, f)) {
+
+        item newItem;
+        sscanf(buffer, "{%d}@{%d}@{%d}",
+               &newItem.qty,
+               &newItem.id,
+               &newItem.durabitity
+        );
+
+        printf("%d", newItem.id);
+
+        appendToStorage(storage, newItem);
+    }
+
+    free(buffer);
+}
+
+void parseSaveFile(map* worldMap, player* player, storageNode** storage){
 
     FILE *f;
 
-    f = fopen("./saveFileTEST.txt","r");
+    f = fopen(SAVE_FILE_LOCATION,"r");
+
+    parseMapData(f, worldMap);
+
+    parsePlayerData(f, player);
+
+    parseStorageData(f, storage);
 
     fclose(f);
 }
