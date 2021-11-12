@@ -23,4 +23,10 @@ player* createPlayer();
 
 void applyLvl(player *player, int lvl);
 
+void applyHp(player *player, int hp);
+
+void applyXp(player *player, int xp);
+
+void displayPlayerInfos(player* player);
+
 #endif //MALLOC_WORLD_PLAYER_H
