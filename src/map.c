@@ -4,7 +4,7 @@
 
 #include "../headers/map.h"
 
-const int MAP_SIZE = 4;
+const int MAP_SIZE = 40;
 
 const mapElement mapElements[103] = {
         { -3, "Portail entre zones II & III", {0, 2, 3} },

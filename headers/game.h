@@ -13,7 +13,7 @@
 
 #define clrscr() printf("\e[1;1H\e[2J")
 
-void display(map* worldMap, player* player);
+void display(map* worldMap, player* player, storageNode* storage);
 int mainMenu();
 int displayConfirm(char* message);
 int game();

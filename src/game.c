@@ -4,12 +4,13 @@
 
 #include "../headers/game.h"
 
-void display(map* worldMap, player* player) {
+void display(map* worldMap, player* player, storageNode* storage) {
 
     clrscr();
 
     displayMap(worldMap);
     displayPlayerInfos(player);
+    printStorage(storage);
 }
 
 int mainMenu() {
@@ -55,11 +56,15 @@ int game() {
     player* player = createPlayer();
     storageNode* storage = NULL;
 
+    parseSaveFile(worldMap, player, &storage);
+
+    printStorage(storage);
+
     int ch = -1;
 
     do
     {
-        display(worldMap, player);
+        display(worldMap, player, storage);
 
         if (ch == 0 || ch == 224) {
 
