@@ -8,6 +8,46 @@ const char* SAVE_FILE_LOCATION = "../saveFile.txt";
 
 const int BUFFER_LENGTH = 255;
 
+// ==== Utils save functions ==== //
+
+int calculateMaxHp(int lvl){
+
+    int maxHp = 100;
+
+    for (int i = 1; i <= 10; ++i) {
+
+        if(lvl == i) return maxHp;
+
+        if(i >= 6 && i < 8) maxHp += 50;
+        else if(i == 8 || i == 9) maxHp += 75;
+        else maxHp += (10*i);
+    }
+
+    return 0;
+}
+
+int checkItem(item *toCheck){
+
+    const itemData* data = getItemData(toCheck->id);
+
+    if(data == NULL)
+        return 0;
+
+    if(data->type == ARMOR || data->type == TOOL || data->type == WEAPON) {
+        if (toCheck->qty != 1) return 0;
+        if (toCheck->durabitity < 0 || toCheck->durabitity > 100) return 0;
+    } else if (data->type == HEAL){
+        if (toCheck->qty != 1) return 0;
+        toCheck->durabitity = 0;
+    } else {
+        toCheck->durabitity = 0;
+    }
+
+    return 1;
+}
+
+// ==== Map save functions ==== //
+
 void parseMapData(FILE * f, map* worldMap){
 
     char* buffer = malloc(BUFFER_LENGTH);
@@ -43,7 +83,31 @@ void parseMapData(FILE * f, map* worldMap){
     free(buffer);
 }
 
-void parsePlayerData(FILE * f, player* player) {
+// ==== Player save functions ==== //
+
+int checkPlayerData(player *playerData){
+
+    const int maxHp = calculateMaxHp(playerData->lvl);
+
+    if(playerData->lvl < 1 || playerData->lvl > 10)
+        return 0;
+
+    if(playerData->maxHp != maxHp)
+        playerData->maxHp = maxHp;
+
+    if(playerData->hp > playerData->maxHp && playerData->hp < 0)
+        return 0;
+
+    for (int i = 0; i < 10; ++i) {
+        if(playerData->inventory[i].id != 0)
+            if(!checkItem(&playerData->inventory[i]))
+                return 0;
+    }
+
+    return 1;
+}
+
+int parsePlayerData(FILE * f, player* player) {
 
     char* buffer = malloc(BUFFER_LENGTH);
 
@@ -76,9 +140,24 @@ void parsePlayerData(FILE * f, player* player) {
     }
 
     free(buffer);
+
+    return checkPlayerData(player);
 }
 
-void parseStorageData(FILE *f, storageNode** storage) {
+// ==== Storage save functions ==== //
+
+int checkStorageData(storageNode *storage) {
+
+    while (storage != NULL) {
+        if(!checkItem(&storage->item)) return 0;
+        storage = storage->next;
+    }
+
+    return 1;
+}
+
+
+int parseStorageData(FILE *f, storageNode** storage) {
 
     char* buffer = malloc(BUFFER_LENGTH);
 
@@ -101,9 +180,13 @@ void parseStorageData(FILE *f, storageNode** storage) {
     }
 
     free(buffer);
+
+    return checkStorageData(*storage);
 }
 
-void parseSaveFile(map* worldMap, player* player, storageNode** storage){
+// ==== Main save functions ==== //
+
+int parseSaveFile(map* worldMap, player* player, storageNode** storage){
 
     FILE *f;
 
@@ -111,11 +194,23 @@ void parseSaveFile(map* worldMap, player* player, storageNode** storage){
 
     parseMapData(f, worldMap);
 
-    parsePlayerData(f, player);
+    if(parsePlayerData(f, player)) {
+        printf("Player data successfully parsed\n");
+    } else {
+        printf("Error occurred while parsing player data\n");
+        return 0;
+    }
 
-    parseStorageData(f, storage);
+    if(parseStorageData(f, storage)) {
+        printf("Storage data successfully parsed\n");
+    } else {
+        printf("Error occurred while parsing storage data\n");
+        return 0;
+    }
 
     fclose(f);
+
+    return 1;
 }
 
 void saveData(map* worldMap, player* player, storageNode* storage) {

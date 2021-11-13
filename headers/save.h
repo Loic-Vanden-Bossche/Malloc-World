@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void parseSaveFile(map* worldMap, player* player, storageNode** storage);
+int parseSaveFile(map* worldMap, player* player, storageNode** storage);
 
 void saveData(map* worldMap, player* player, storageNode* storage);
 
