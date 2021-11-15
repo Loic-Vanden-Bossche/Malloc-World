@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.20)
+project(Malloc-World-SDL C)
+
+set(CMAKE_C_STANDARD 99)
+
+set(SDL2_LIBRARY SDL2)
+
+set(Sources src/main.c)
+set(Headers headers/main.h)
+
+add_executable(Malloc-World-SDL ${Sources} ${Headers})
+
+target_link_libraries(Malloc-World-SDL ${SDL2_LIBRARY})

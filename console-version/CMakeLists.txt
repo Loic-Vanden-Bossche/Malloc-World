@@ -4,6 +4,6 @@ project(Malloc-World C)
 set(CMAKE_C_STANDARD 99)
 
 set(Sources src/main.c src/save.c)
-set(Headers headers/save.h src/map.c headers/map.h headers/main.h src/player.c headers/player.h src/item.c headers/item.h src/craft.c headers/craft.h src/game.c headers/game.h src/storage.c headers/storage.h)
+set(Headers headers/save.h src/map.c headers/map.h headers/main.h src/player.c headers/player.h src/item.c headers/item.h src/craft.c headers/craft.h src/game.c headers/game.h src/storage.c headers/storage.h ../SDL-version/src/main.c ../SDL-version/headers/main.h)
 
 add_executable(Malloc-World ${Sources} ${Headers})
