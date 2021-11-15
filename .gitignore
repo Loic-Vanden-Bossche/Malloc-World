@@ -1,7 +1,7 @@
 # Custom
 cmake-build-debug
 .idea
-./saveFile.txt
+saveFile.txt
 
 # Prerequisites
 *.d

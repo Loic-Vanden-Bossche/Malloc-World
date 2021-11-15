@@ -325,7 +325,7 @@ suivante:
 
 1. Carte:
 
-![nom map](./images/nom-map.png "nom map")
+![nom map](.github-images/nom-map.png "nom map")
 
 3. Joueur, inventaire et coffre de stockage:
 
@@ -335,7 +335,7 @@ suivante:
    La durabilité est optionnelle, si l’objet ne possède pas de durabilité mettre 0.  
    Si les emplacements de l’inventaire sont vides, mettre toutes les informations à 0
 
-![nom player](./images/nom-player.png "nom player")
+![nom player](.github-images/nom-player.png "nom player")
 
 Il devra également être possible de charger une partie depuis un fichier de sauvegarde
 respectant ce format.
