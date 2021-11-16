@@ -7,6 +7,10 @@
 
 #include "stdlib.h"
 #include "stdio.h"
+#include "map-generator.h"
+
+#define MAP_SIZE_X 150
+#define MAP_SIZE_Y 40
 
 typedef struct MapElement {
 
@@ -18,7 +22,8 @@ typedef struct MapElement {
 
 typedef struct Map {
     int currentLvl;
-    int mapSize;
+    int mapSizeX;
+    int mapSizeY;
     int ***lvl;
 } map;
 
@@ -30,5 +35,6 @@ map* createMap(int startLvl);
 void destroyMap(map* worldMap);
 
 void displayMap(map* worldMap);
+
 
 #endif //MALLOC_WORLD_MAP_H

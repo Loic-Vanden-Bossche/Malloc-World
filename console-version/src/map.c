@@ -4,8 +4,6 @@
 
 #include "../headers/map.h"
 
-const int MAP_SIZE = 40;
-
 const mapElement mapElements[103] = {
         { -3, "Portail entre zones II & III", {0, 2, 3} },
         { -2, "Portail entre zones I & II", {1, 2, 0} },
@@ -127,17 +125,18 @@ int elementIsInLvl(mapElement element, int targetLvl) {
 map *createMap(int startLvl) {
 
     map *newMap = malloc(sizeof(newMap));
-    newMap->mapSize = MAP_SIZE;
+    newMap->mapSizeX = MAP_SIZE_X;
+    newMap->mapSizeY = MAP_SIZE_Y;
     newMap->currentLvl = startLvl;
 
     newMap->lvl = malloc(3*sizeof(int**));
 
     for (int lvl = 0; lvl < 3; lvl++) {
-        newMap->lvl[lvl] = malloc(MAP_SIZE*sizeof(int*));
-        for (int i = 0; i < MAP_SIZE; i++) {
-            newMap->lvl[lvl][i] = malloc(MAP_SIZE*sizeof(int));
+        newMap->lvl[lvl] = malloc(MAP_SIZE_Y*sizeof(int*));
+        for (int i = 0; i < MAP_SIZE_Y; i++) {
+            newMap->lvl[lvl][i] = malloc(MAP_SIZE_X*sizeof(int));
 
-            for (int j = 0; j < MAP_SIZE; ++j) {
+            for (int j = 0; j < MAP_SIZE_X; ++j) {
                 newMap->lvl[lvl][i][j] = 0;
             }
         }
@@ -149,8 +148,8 @@ map *createMap(int startLvl) {
 void destroyMap(map *worldMap) {
 
     for (int lvl = 0; lvl < 3; ++lvl) {
-        for (int i = 0; i < worldMap->mapSize; ++i) {
-            free(worldMap->lvl[lvl][i]);
+        for (int i = 0; i < worldMap->mapSizeY; ++i) {
+            //free(worldMap->lvl[lvl][i]);
         }
     }
 
@@ -163,11 +162,10 @@ void destroyMap(map *worldMap) {
 
 void displayMap(map* worldMap) {
 
-    for (int i = 0; i < worldMap->mapSize; ++i) {
-        for (int j = 0; j < worldMap->mapSize; ++j) {
+    for (int i = 0; i < worldMap->mapSizeY; ++i) {
+        for (int j = 0; j < worldMap->mapSizeX; ++j) {
             printf("%d", worldMap->lvl[worldMap->currentLvl][i][j]);
         }
         printf("\n");
     }
 }
-
