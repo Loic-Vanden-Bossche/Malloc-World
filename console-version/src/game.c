@@ -50,13 +50,21 @@ int displayConfirm(char* message) {
     }
 }
 
+void generateMap(map* worldMap){
+
+    for (int i = 0; i < 3; ++i)
+        cellularAutomata(worldMap->lvl[i]);
+}
+
 int game() {
 
     map *worldMap = createMap(0);
     player* player = createPlayer();
     storageNode* storage = NULL;
 
-    parseSaveFile(worldMap, player, &storage);
+    generateMap(worldMap);
+
+    //parseSaveFile(worldMap, player, &storage);
 
     printStorage(storage);
 
