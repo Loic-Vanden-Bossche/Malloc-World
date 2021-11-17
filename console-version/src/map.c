@@ -125,8 +125,6 @@ int elementIsInLvl(mapElement element, int targetLvl) {
 map *createMap(int startLvl) {
 
     map *newMap = malloc(sizeof(newMap));
-    newMap->mapSizeX = MAP_SIZE_X;
-    newMap->mapSizeY = MAP_SIZE_Y;
     newMap->currentLvl = startLvl;
 
     newMap->lvl = malloc(3*sizeof(int**));
@@ -148,7 +146,7 @@ map *createMap(int startLvl) {
 void destroyMap(map *worldMap) {
 
     for (int lvl = 0; lvl < 3; ++lvl) {
-        for (int i = 0; i < worldMap->mapSizeY; ++i) {
+        for (int i = 0; i < MAP_SIZE_Y; ++i) {
             //free(worldMap->lvl[lvl][i]);
         }
     }
@@ -160,12 +158,19 @@ void destroyMap(map *worldMap) {
     free(worldMap->lvl);
 }
 
-void displayMap(map* worldMap) {
+void displayMap(int** grid) {
 
-    for (int i = 0; i < worldMap->mapSizeY; ++i) {
-        for (int j = 0; j < worldMap->mapSizeX; ++j) {
-            printf("%d", worldMap->lvl[worldMap->currentLvl][i][j]);
+    int xi, yi;
+
+    for(yi=0; yi<MAP_SIZE_Y; yi++)
+    {
+        for(xi=0; xi<MAP_SIZE_X; xi++)
+        {
+            switch(grid[yi][xi]) {
+                case TILE_WALL:  putchar('#'); break;
+                case TILE_FLOOR: putchar('.'); break;
+            }
         }
-        printf("\n");
+        putchar('\n');
     }
 }
