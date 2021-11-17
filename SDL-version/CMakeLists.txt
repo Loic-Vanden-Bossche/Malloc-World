@@ -12,7 +12,7 @@ message(STATUS "SDL2 location is : " ${SDL2_LIBRARY})
 set(Sources src/main.c)
 set(Headers headers/main.h)
 
-include_directories(${CMAKE_SOURCE_DIR}/SDL2-Library/SDL2-2.0.16/x86_64-w64-mingw32/includes)
+include_directories(${CMAKE_SOURCE_DIR}/SDL2-Library/SDL2-2.0.16/x86_64-w64-mingw32/include)
 
 add_executable(Malloc-World-SDL ${Sources} ${Headers})
 
