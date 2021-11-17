@@ -6,7 +6,7 @@
 
 const char* SAVE_FILE_LOCATION = "../saveFile.txt";
 
-const int BUFFER_LENGTH = 512;
+const int BUFFER_LENGTH = (MAP_SIZE_X * 2) + 2;
 
 // ==== Utils save functions ==== //
 
