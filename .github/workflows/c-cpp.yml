@@ -26,6 +26,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: prepare SDL2 library
+        run: |
+          mkdir ./SDL-version/SDL2-library
+          Invoke-WebRequest https://www.libsdl.org/release/SDL2-devel-2.0.16-mingw.tar.gz -OutFile SDL-version/SDL2-Library SDL2.tar.gz
+          tar zxf .\SDL-version\SDL2-Library\SDL2.tar.gz -C .\SDL-version\SDL2-Library\
+          rm .\SDL-version\SDL2-Library\SDL2.tar.gz
+
       - name: configure
         run: cmake ./SDL-version -B "./SDL-version/cmake-build-debug" -G "MinGW Makefiles"
       - name: build
