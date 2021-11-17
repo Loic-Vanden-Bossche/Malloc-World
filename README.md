@@ -1,4 +1,10 @@
 # Malloc-World Project
+
+Ce projet est disponible en deux versions :
+
+1. Version ligne de commande.
+2. Version graphique avec la SDL2
+
 ## Mise en route du projet
 Ce projet utilise CMAKE
 
