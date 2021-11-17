@@ -6,7 +6,7 @@ on:
       - '**'
 
 jobs:
-  build-console-verison:
+  build-console-version:
 
     runs-on: windows-latest
 
@@ -17,7 +17,7 @@ jobs:
       - name: build
         run: cmake --build ./console-version/cmake-build-debug/ --target all
 
-  build-SDL-verison:
+  build-SDL-version:
 
     runs-on: windows-latest
 
