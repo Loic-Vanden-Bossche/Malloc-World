@@ -16,7 +16,7 @@
 void display(map* worldMap, player* player, storageNode* storage);
 int mainMenu();
 int displayConfirm(char* message);
-int game();
 int newGame();
+int continueGame();
 
 #endif //MALLOC_WORLD_GAME_H
