@@ -3,6 +3,8 @@ project(Malloc-World-SDL C)
 
 set(CMAKE_C_STANDARD 99)
 
+message(STATUS project location is : ${CMAKE_SOURCE_DIR})
+
 find_library(SDL2_LIBRARY SDL2 HINTS ${CMAKE_SOURCE_DIR}/SDL2-Libraries/lib)
 
 set(Sources src/main.c)
