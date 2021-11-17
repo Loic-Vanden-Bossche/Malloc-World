@@ -32,3 +32,15 @@ void printStorage(storageNode* node)
         node = node->next;
     }
 }
+
+void destroyStorage(storageNode *storage){
+
+    storageNode* tmp;
+
+    while (storage != NULL)
+    {
+        tmp = storage;
+        storage = storage->next;
+        free(tmp);
+    }
+}

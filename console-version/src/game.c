@@ -87,8 +87,6 @@ int game(map* worldMap, player* player, storageNode* storage) {
 
     saveData(worldMap, player, storage);
 
-    destroyMap(worldMap);
-
     return 0;
 }
 
@@ -101,6 +99,11 @@ int newGame() {
     generateMap(worldMap);
 
     game(worldMap, player, storage);
+
+    destroyMap(worldMap);
+    destroyStorage(storage);
+    destroyPlayer(player);
+
     return 0;
 }
 
@@ -113,6 +116,11 @@ int continueGame() {
     parseSaveFile(worldMap, player, &storage);
 
     game(worldMap, player, storage);
+
+    destroyMap(worldMap);
+    destroyStorage(storage);
+    destroyPlayer(player);
+
     return 0;
 }
 

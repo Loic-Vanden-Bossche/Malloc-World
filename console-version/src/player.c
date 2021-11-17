@@ -25,6 +25,11 @@ player* createPlayer() {
     return newPlayer;
 }
 
+void destroyPlayer(player* player) {
+
+    free(player);
+}
+
 void displayPlayerInventory(player* player){
 
     printf("Player inventory : \n");
