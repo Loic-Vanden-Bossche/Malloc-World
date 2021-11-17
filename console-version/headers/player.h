@@ -21,6 +21,8 @@ typedef struct Player {
 
 player* createPlayer();
 
+void destroyPlayer();
+
 void applyLvl(player *player, int lvl);
 
 void applyHp(player *player, int hp);

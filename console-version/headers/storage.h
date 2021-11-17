@@ -17,4 +17,6 @@ void appendToStorage(storageNode** headRef, item item);
 
 void printStorage(storageNode* storage);
 
+void destroyStorage(storageNode* storage);
+
 #endif //MALLOC_WORLD_STORAGE_H
