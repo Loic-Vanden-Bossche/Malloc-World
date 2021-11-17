@@ -16,6 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: cmake -B "./console-version/cmake-build-debug" -G "MinGW Makefiles"
+      run: cmake ./console-version -B "./console-version/cmake-build-debug" -G "MinGW Makefiles"
     - name: build
       run: cmake --build ./console-version/cmake-build-debug/ --target all
