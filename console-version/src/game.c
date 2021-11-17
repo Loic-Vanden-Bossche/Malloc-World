@@ -8,7 +8,9 @@ void display(map* worldMap, player* player, storageNode* storage) {
 
     clrscr();
 
-    displayMap(worldMap);
+    for (int i = 0; i < 3; ++i)
+        displayMap(worldMap->lvl[i]);
+
     displayPlayerInfos(player);
     printStorage(storage);
 }

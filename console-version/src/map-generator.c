@@ -6,14 +6,10 @@
 
 // Cellular Automata
 
-#define TILE_FLOOR 0
-#define TILE_WALL 1
-
 typedef struct {
     int r1_cutoff, r2_cutoff;
     int reps;
 } generation_params;
-
 
 int fillprob = 40;
 int r1_cutoff = 5, r2_cutoff = 2;
@@ -84,23 +80,6 @@ void generation(int** grid, int** grid2)
             grid[yi][xi] = grid2[yi][xi];
 }
 
-void printmap(int** grid)
-{
-    int xi, yi;
-
-    for(yi=0; yi<MAP_SIZE_Y; yi++)
-    {
-        for(xi=0; xi<MAP_SIZE_X; xi++)
-        {
-            switch(grid[yi][xi]) {
-                case TILE_WALL:  putchar('#'); break;
-                case TILE_FLOOR: putchar('.'); break;
-            }
-        }
-        putchar('\n');
-    }
-}
-
 int cellularAutomata(int** grid)
 {
     int ii, jj;
@@ -115,18 +94,14 @@ int cellularAutomata(int** grid)
     params->r2_cutoff  = 1;
     params->reps 	   = 20;
 
-    srand(time(NULL));
-
     int **grid2;
 
     int yi;
-
 
     grid2 = (int**)malloc(sizeof(int*) * MAP_SIZE_Y);
 
     for(yi=0; yi<MAP_SIZE_Y; yi++)
     {
-        grid [yi] = (int*)malloc(sizeof(int) * MAP_SIZE_X);
         grid2[yi] = (int*)malloc(sizeof(int) * MAP_SIZE_X);
     }
 
@@ -139,6 +114,12 @@ int cellularAutomata(int** grid)
             generation(grid, grid2);
     }
 
-    printmap(grid);
+    for(yi=0; yi<MAP_SIZE_Y; yi++)
+    {
+         free(grid2[yi]);
+    }
+
+    free(grid2);
+
     return 0;
 }
