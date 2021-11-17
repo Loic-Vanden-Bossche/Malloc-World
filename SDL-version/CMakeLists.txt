@@ -8,6 +8,9 @@ set(SDL2_LIBRARY SDL2)
 set(Sources src/main.c)
 set(Headers headers/main.h)
 
+include_directories(${CMAKE_SOURCE_DIR}/SDL2-Libraries/includes)
+link_directories(${CMAKE_SOURCE_DIR}/SDL2-Libraries/lib)
+
 add_executable(Malloc-World-SDL ${Sources} ${Headers})
 
 target_link_libraries(Malloc-World-SDL ${SDL2_LIBRARY})
