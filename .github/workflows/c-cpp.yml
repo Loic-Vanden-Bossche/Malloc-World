@@ -11,15 +11,11 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      run: cmake -B "./console-version/cmake-build-debug" -G "MinGW Makefiles"
+    - name: build
+      run: cmake --build ./console-version/cmake-build-debug/ --target all
