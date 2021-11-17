@@ -9,7 +9,7 @@ on:
       - '**'
 
 jobs:
-  build:
+  build-console-verison:
 
     runs-on: windows-latest
 
@@ -19,3 +19,15 @@ jobs:
       run: cmake ./console-version -B "./console-version/cmake-build-debug" -G "MinGW Makefiles"
     - name: build
       run: cmake --build ./console-version/cmake-build-debug/ --target all
+
+  build-SDL-verison:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: configure
+        run: cmake ./SDL-version -B "./SDL-version/cmake-build-debug" -G "MinGW Makefiles"
+      - name: build
+        run: cmake --build ./SDL-version/cmake-build-debug/ --target all
+
