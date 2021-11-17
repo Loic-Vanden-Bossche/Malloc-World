@@ -8,7 +8,7 @@ int main() {
 
         switch (mainMenu()) {
             case 1:
-                game();
+                continueGame();
                 break;
             case 2:
                 if(displayConfirm("Êtes-vous sur d'écraser votre sauvegarde actuelle ?"))

@@ -56,17 +56,9 @@ void generateMap(map* worldMap){
         cellularAutomata(worldMap->lvl[i]);
 }
 
-int game() {
 
-    map *worldMap = createMap(0);
-    player* player = createPlayer();
-    storageNode* storage = NULL;
 
-    generateMap(worldMap);
-
-    //parseSaveFile(worldMap, player, &storage);
-
-    printStorage(storage);
+int game(map* worldMap, player* player, storageNode* storage) {
 
     int ch = -1;
 
@@ -102,6 +94,25 @@ int game() {
 
 int newGame() {
 
-    game();
+    map *worldMap = createMap(0);
+    player* player = createPlayer();
+    storageNode* storage = NULL;
+
+    generateMap(worldMap);
+
+    game(worldMap, player, storage);
     return 0;
 }
+
+int continueGame() {
+
+    map *worldMap = createMap(0);
+    player* player = createPlayer();
+    storageNode* storage = NULL;
+
+    parseSaveFile(worldMap, player, &storage);
+
+    game(worldMap, player, storage);
+    return 0;
+}
+
