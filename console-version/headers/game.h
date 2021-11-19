@@ -5,7 +5,6 @@
 #ifndef MALLOC_WORLD_GAME_H
 #define MALLOC_WORLD_GAME_H
 
-#include <conio.h>
 #include "./save.h"
 #include "./map.h"
 #include "./player.h"
