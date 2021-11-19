@@ -6,18 +6,18 @@ on:
       - '**'
 
 jobs:
-  build-console-verison:
+  build-console-version:
 
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: configure
-      run: cmake ./console-version -B "./console-version/cmake-build-debug" -G "MinGW Makefiles"
-    - name: build
-      run: cmake --build ./console-version/cmake-build-debug/ --target all
+      - uses: actions/checkout@v2
+      - name: configure
+        run: cmake ./console-version -B "./console-version/cmake-build-debug" -G "MinGW Makefiles"
+      - name: build
+        run: cmake --build ./console-version/cmake-build-debug/ --target all
 
-  build-SDL-verison:
+  build-SDL-version:
 
     runs-on: windows-latest
 
@@ -29,9 +29,7 @@ jobs:
           Invoke-WebRequest https://www.libsdl.org/release/SDL2-devel-2.0.16-mingw.tar.gz -OutFile SDL-version/SDL2-Library/SDL2.tar.gz
           tar zxf .\SDL-version\SDL2-Library\SDL2.tar.gz -C .\SDL-version\SDL2-Library\
           rm .\SDL-version\SDL2-Library\SDL2.tar.gz
-
       - name: configure
         run: cmake ./SDL-version -B "./SDL-version/cmake-build-debug" -G "MinGW Makefiles"
       - name: build
         run: cmake --build ./SDL-version/cmake-build-debug/ --target all
-

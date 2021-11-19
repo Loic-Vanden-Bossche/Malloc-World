@@ -3,6 +3,7 @@ cmake-build-debug
 SDL2-Library
 .idea
 saveFile.txt
+SDL2-Library
 
 # Prerequisites
 *.d

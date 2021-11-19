@@ -6,7 +6,7 @@
 
 const char* SAVE_FILE_LOCATION = "../saveFile.txt";
 
-const int BUFFER_LENGTH = 512;
+const int BUFFER_LENGTH = 2000;
 
 // ==== Utils save functions ==== //
 
@@ -61,7 +61,7 @@ void parseMapData(FILE * f, map* worldMap){
         fgets(buffer, BUFFER_LENGTH, f);
 
         // Getting map infos for lvl
-        for (int i = 0; i < worldMap->mapSizeY; ++i) {
+        for (int i = 0; i < MAP_SIZE_Y; ++i) {
             fgets(buffer, BUFFER_LENGTH, f);
 
             char* strToken = strtok (buffer, " ");
@@ -73,7 +73,7 @@ void parseMapData(FILE * f, map* worldMap){
 
                 tokCount++;
 
-                if(tokCount > worldMap->mapSizeX) break;
+                if(tokCount > MAP_SIZE_X) break;
 
                 strToken = strtok(NULL, " ");
             }
@@ -224,9 +224,9 @@ void saveData(map* worldMap, player* player, storageNode* storage) {
     for (int lvl = 0; lvl < 3; ++lvl) {
         fprintf(f,"\n-- ZONE %d --", lvl + 1);
 
-        for (int i = 0; i < worldMap->mapSizeY; ++i) {
+        for (int i = 0; i < MAP_SIZE_Y; ++i) {
             fprintf(f,"\n");
-            for (int j = 0; j < worldMap->mapSizeX; ++j) {
+            for (int j = 0; j < MAP_SIZE_X; ++j) {
                 fprintf(f,"%d ", worldMap->lvl[lvl][i][j]);
             }
         }

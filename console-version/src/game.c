@@ -8,7 +8,9 @@ void display(map* worldMap, player* player, storageNode* storage) {
 
     clrscr();
 
-    displayMap(worldMap);
+    for (int i = 0; i < 3; ++i)
+        displayMap(worldMap->lvl[i]);
+
     displayPlayerInfos(player);
     printStorage(storage);
 }
@@ -56,17 +58,9 @@ void generateMap(map* worldMap){
         cellularAutomata(worldMap->lvl[i]);
 }
 
-int game() {
 
-    map *worldMap = createMap(0);
-    player* player = createPlayer();
-    storageNode* storage = NULL;
 
-    generateMap(worldMap);
-
-    //parseSaveFile(worldMap, player, &storage);
-
-    printStorage(storage);
+int game(map* worldMap, player* player, storageNode* storage) {
 
     int ch = -1;
 
@@ -95,13 +89,40 @@ int game() {
 
     saveData(worldMap, player, storage);
 
-    destroyMap(worldMap);
-
     return 0;
 }
 
 int newGame() {
 
-    game();
+    map *worldMap = createMap(0);
+    player* player = createPlayer();
+    storageNode* storage = NULL;
+
+    generateMap(worldMap);
+
+    game(worldMap, player, storage);
+
+    destroyMap(worldMap);
+    destroyStorage(storage);
+    destroyPlayer(player);
+
     return 0;
 }
+
+int continueGame() {
+
+    map *worldMap = createMap(0);
+    player* player = createPlayer();
+    storageNode* storage = NULL;
+
+    parseSaveFile(worldMap, player, &storage);
+
+    game(worldMap, player, storage);
+
+    destroyMap(worldMap);
+    destroyStorage(storage);
+    destroyPlayer(player);
+
+    return 0;
+}
+

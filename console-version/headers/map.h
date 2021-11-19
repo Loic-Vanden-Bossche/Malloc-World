@@ -12,6 +12,9 @@
 #define MAP_SIZE_X 150
 #define MAP_SIZE_Y 40
 
+#define TILE_FLOOR 0
+#define TILE_WALL -1
+
 typedef struct MapElement {
 
   int value;
@@ -22,8 +25,6 @@ typedef struct MapElement {
 
 typedef struct Map {
     int currentLvl;
-    int mapSizeX;
-    int mapSizeY;
     int ***lvl;
 } map;
 
@@ -34,7 +35,7 @@ map* createMap(int startLvl);
 
 void destroyMap(map* worldMap);
 
-void displayMap(map* worldMap);
+void displayMap(int** grid);
 
 
 #endif //MALLOC_WORLD_MAP_H
