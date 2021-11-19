@@ -6,7 +6,7 @@ on:
       - '**'
 
 jobs:
-  build-console-version:
+  build-windows-console-version:
 
     runs-on: windows-latest
 
@@ -17,7 +17,18 @@ jobs:
       - name: build
         run: cmake --build ./console-version/cmake-build-debug/ --target all
 
-  build-SDL-version:
+  build-linux-console-version:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: configure
+        run: cmake ./console-version -B "./console-version/cmake-build-debug" -G "Unix Makefiles"
+      - name: build
+        run: cmake --build ./console-version/cmake-build-debug/ --target all
+
+  build-windows-SDL-version:
 
     runs-on: windows-latest
 
