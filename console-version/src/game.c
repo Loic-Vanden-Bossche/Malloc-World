@@ -8,6 +8,9 @@ void display(map* worldMap, player* player, storageNode* storage) {
 
     clrscr();
 
+
+    clrscr();
+
     for (int i = 0; i < 3; ++i)
         displayMap(worldMap->lvl[i]);
 
@@ -23,11 +26,12 @@ int mainMenu() {
     printf("2 - Nouvelle partie\n");
     printf("3 - Quitter\n");
 
-    int ch;
+    char ch;
 
     while(1) {
 
-        ch = getch();
+        fflush(stdin);
+        ch = getchar();
 
         if(ch == '1' || ch == '2' || ch == '3'){
 
@@ -41,11 +45,12 @@ int displayConfirm(char* message) {
     clrscr();
     printf("%s Oui (o) Non (n)\n",message);
 
-    int ch;
+    char ch = 0;
 
     while(1) {
 
-        ch = getch();
+        fflush(stdin);
+        ch = getchar();
 
         if (ch == 'o') return 1;
         else if (ch == 'n') return 0;
@@ -62,30 +67,31 @@ void generateMap(map* worldMap){
 
 int game(map* worldMap, player* player, storageNode* storage) {
 
-    int ch = -1;
+    char ch = 0;
 
     do
     {
         display(worldMap, player, storage);
 
-        if (ch == 0 || ch == 224) {
-
-            switch (getch()) {
-                case 80:
-                    printf("DOWN");
-                    break;
-                case 72:
-                    printf("UP");
-                    break;
-                case 77:
-                    printf("RIGHT");
-                    break;
-                case 75:
-                    printf("LEFT");
-                    break;
-            }
+        switch (ch) {
+            case 's':
+                printf("DOWN");
+                break;
+            case 'z':
+                printf("UP");
+                break;
+            case 'd':
+                printf("RIGHT");
+                break;
+            case 'q':
+                printf("LEFT");
+                break;
         }
-    } while ((ch = getch()) != 27);
+
+        fflush(stdin);
+        ch = getchar();
+
+    } while (ch != 'a');
 
     saveData(worldMap, player, storage);
 
