@@ -1,4 +1,4 @@
-name: MALLOC-WORLD-BUILD
+name: build
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - '**'
 
 jobs:
-  build-console-version:
+  windows-console-version:
 
     runs-on: windows-latest
 
@@ -17,7 +17,7 @@ jobs:
       - name: build
         run: cmake --build ./console-version/cmake-build-debug/ --target all
 
-  build-linux-console-version:
+  linux-console-version:
 
     runs-on: ubuntu-20.04
 
@@ -28,7 +28,7 @@ jobs:
       - name: build
         run: cmake --build ./console-version/cmake-build-debug/ --target all
 
-  build-SDL-version:
+  windows-SDL-version:
 
     runs-on: windows-latest
 
@@ -45,7 +45,7 @@ jobs:
       - name: build
         run: cmake --build ./SDL-version/cmake-build-debug/ --target all
 
-  build-linux-SDL-version:
+  linux-SDL-version:
 
     runs-on: ubuntu-20.04
 
