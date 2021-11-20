@@ -1,5 +1,4 @@
 #include "../headers/main.h"
-
 int main() {
 
     int exit = 0;

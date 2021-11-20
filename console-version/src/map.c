@@ -169,6 +169,7 @@ void displayMap(int** grid) {
             switch(grid[yi][xi]) {
                 case TILE_WALL:  putchar('#'); break;
                 case TILE_FLOOR: putchar('.'); break;
+                default: printf("%d", grid[yi][xi]);
             }
         }
         putchar('\n');

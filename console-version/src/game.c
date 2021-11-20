@@ -8,9 +8,6 @@ void display(map* worldMap, player* player, storageNode* storage) {
 
     clrscr();
 
-
-    clrscr();
-
     for (int i = 0; i < 3; ++i)
         displayMap(worldMap->lvl[i]);
 
@@ -40,6 +37,16 @@ int mainMenu() {
     }
 }
 
+void waitKey(char* message){
+
+    clrscr();
+
+    printf("%s, press any key to continue\n",message);
+
+    fflush(stdin);
+    getchar();
+}
+
 int displayConfirm(char* message) {
 
     clrscr();
@@ -63,15 +70,15 @@ void generateMap(map* worldMap){
         cellularAutomata(worldMap->lvl[i]);
 }
 
-
-
 int game(map* worldMap, player* player, storageNode* storage) {
+
+    displayAStarResults(solveAStar(worldMap->lvl[worldMap->currentLvl], 1, 1, 5, 20));
 
     char ch = 0;
 
     do
     {
-        display(worldMap, player, storage);
+        displayMap(worldMap->lvl[worldMap->currentLvl]);
 
         switch (ch) {
             case 's':
@@ -117,11 +124,17 @@ int newGame() {
 
 int continueGame() {
 
+    if(!checkSaveFile()){
+        return 0;
+    }
+
     map *worldMap = createMap(0);
     player* player = createPlayer();
     storageNode* storage = NULL;
 
-    parseSaveFile(worldMap, player, &storage);
+    if(!parseSaveFile(worldMap, player, &storage)){
+        waitKey("Error occurred while getting saved data");
+    }
 
     game(worldMap, player, storage);
 
