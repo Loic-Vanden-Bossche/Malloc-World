@@ -12,7 +12,7 @@
 #include <string.h>
 
 int parseSaveFile(map* worldMap, player* player, storageNode** storage);
-
+int checkSaveFile();
 void saveData(map* worldMap, player* player, storageNode* storage);
 
 #endif //MALLOC_WORLD_SAVE_H

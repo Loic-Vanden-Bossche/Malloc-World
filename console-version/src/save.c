@@ -80,7 +80,7 @@ void parseMapData(FILE * f, map* worldMap){
         }
     }
 
-    free(buffer);
+    //free(buffer);
 }
 
 // ==== Player save functions ==== //
@@ -185,6 +185,16 @@ int parseStorageData(FILE *f, storageNode** storage) {
 }
 
 // ==== Main save functions ==== //
+
+int checkSaveFile(){
+
+    FILE *file;
+    file = fopen(SAVE_FILE_LOCATION, "r");
+
+    if (file != NULL) return 1;
+
+    return 0;
+}
 
 int parseSaveFile(map* worldMap, player* player, storageNode** storage){
 
