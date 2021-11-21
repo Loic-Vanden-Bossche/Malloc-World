@@ -26,7 +26,7 @@ int isValid(int row, int col)
 
 int isUnBlocked(int grid[][MAP_SIZE_X], int row, int col)
 {
-    return grid[col][row] == 1;
+    return grid[row][col] == 1;
 }
 
 int isDestination(int row, int col, Pair dest)
@@ -168,23 +168,22 @@ void displayAStarResults(pathFindResult res) {
             break;
         case 0:
             debug("Source is invalid\n");
-            break;
+            return;
         case -1:
             debug("Destination is invalid\n");
-            break;
+            return;
         case -2:
             debug("Source or the destination is blocked\n");
-            break;
+            return;
         case -3:
             debug("We are already at the destination\n");
-            break;
+            return;
         case -4:
             debug("Failed to find the Destination Cell\n");
-            break;
+            return;
         default:
             debug("Unknown error occurred\n");
-            break;
-
+            return;
     }
 
     while (res.path->next != NULL) {
@@ -518,8 +517,8 @@ pathFindResult solveAStar(int** mapGrid,int xS,int yS,int xD,int yD)
         }
     }
 
-    Pair src = make_pair(xS, yS);
-    Pair dest = make_pair(xD, yD);
+    Pair src = make_pair(yS, xS);
+    Pair dest = make_pair(yD, xD);
 
     return aStarSearch(grid, src, dest);
 }

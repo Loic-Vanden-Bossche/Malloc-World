@@ -38,10 +38,10 @@ void initmap(int** grid, int** grid2)
         for(xi=0; xi<MAP_SIZE_X; xi++)
             grid2[yi][xi] = TILE_WALL;
 
-    for(yi=0; yi<MAP_SIZE_Y; yi++)
+    /*for(yi=0; yi<MAP_SIZE_Y; yi++)
         grid[yi][0] = grid[yi][MAP_SIZE_X-1] = TILE_WALL;
     for(xi=0; xi<MAP_SIZE_X; xi++)
-        grid[0][xi] = grid[MAP_SIZE_Y-1][xi] = TILE_WALL;
+        grid[0][xi] = grid[MAP_SIZE_Y-1][xi] = TILE_WALL;*/
 }
 
 void generation(int** grid, int** grid2)
@@ -122,4 +122,61 @@ int cellularAutomata(int** grid)
     free(grid2);
 
     return 0;
+}
+
+typedef struct Coordinate {
+    int x;
+    int y;
+} coordinate;
+
+coordinate getRandomCoordinate(){
+
+    coordinate res = {0, 0};
+
+    res.x = (rand() % (MAP_SIZE_X - 2)) + 1;
+    res.y = (rand() % (MAP_SIZE_Y - 2)) + 1;
+
+    return res;
+}
+
+void printCoordinate(coordinate coords){
+    debug("(%d, %d)\n", coords.x, coords.y);
+}
+
+#define TOTAL_RESOURCE_RT 0.12
+
+void populateMap(map* worldMap) {
+
+    coordinate coords;
+
+    pathFindResult pRes;
+
+    int isBlocked;
+
+    int itCount = 0;
+
+    const int totalResources = (MAP_SIZE_X*MAP_SIZE_Y) * TOTAL_RESOURCE_RT;
+
+    for (int i = 0; i < totalResources; ++i) {
+
+        do {
+
+            pRes.solved = 0;
+            pRes.path = NULL;
+
+            coords = getRandomCoordinate();
+            isBlocked = worldMap->lvl[0][coords.y][coords.x] != 0;
+
+            if(!isBlocked) {
+                pRes = solveAStar(worldMap->lvl[0], 0, 0, coords.x, coords.y);
+            }
+
+            itCount++;
+
+        } while(isBlocked || pRes.solved != 1);
+
+        printCoordinate(coords);
+
+        worldMap->lvl[0][coords.y][coords.x] = 2;
+    }
 }

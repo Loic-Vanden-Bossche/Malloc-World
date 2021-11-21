@@ -7,7 +7,7 @@
 
 #include "stdlib.h"
 #include "stdio.h"
-#include "map-generator.h"
+
 
 #define MAP_SIZE_X 150
 #define MAP_SIZE_Y 40
@@ -37,5 +37,6 @@ void destroyMap(map* worldMap);
 
 void displayMap(int** grid);
 
+#include "map-generator.h"
 
 #endif //MALLOC_WORLD_MAP_H

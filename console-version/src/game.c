@@ -66,8 +66,11 @@ int displayConfirm(char* message) {
 
 void generateMap(map* worldMap){
 
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i) {
         cellularAutomata(worldMap->lvl[i]);
+    }
+
+    populateMap(worldMap);
 }
 
 int game(map* worldMap, player* player, storageNode* storage) {
