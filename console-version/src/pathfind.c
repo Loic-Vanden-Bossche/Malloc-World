@@ -164,36 +164,36 @@ void displayAStarResults(pathFindResult res) {
 
     switch (res.solved) {
         case 1:
-            printf("The destination cell is found\n");
+            debug("The destination cell is found\n");
             break;
         case 0:
-            printf("Source is invalid\n");
+            debug("Source is invalid\n");
             break;
         case -1:
-            printf("Destination is invalid\n");
+            debug("Destination is invalid\n");
             break;
         case -2:
-            printf("Source or the destination is blocked\n");
+            debug("Source or the destination is blocked\n");
             break;
         case -3:
-            printf("We are already at the destination\n");
+            debug("We are already at the destination\n");
             break;
         case -4:
-            printf("Failed to find the Destination Cell\n");
+            debug("Failed to find the Destination Cell\n");
             break;
         default:
-            printf("Unknown error occurred\n");
+            debug("Unknown error occurred\n");
             break;
 
     }
 
     while (res.path->next != NULL) {
-        printf("(%d,%d) -> ", res.path->value.first, res.path->value.second);
+        debug("(%d,%d) -> ", res.path->value.first, res.path->value.second);
         res.path = res.path->next;
     }
 
-    printf("(%d,%d)", res.path->value.first, res.path->value.second);
-    printf("\n");
+    debug("(%d,%d)", res.path->value.first, res.path->value.second);
+    debug("\n");
 }
 
 pathFindResult formatResult(pairListNode* path,int solved){

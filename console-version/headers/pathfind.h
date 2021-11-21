@@ -6,6 +6,7 @@
 #define MALLOC_WORLD_PATHFIND_H
 
 #include "map.h"
+#include "debugger.h"
 #include <string.h>
 #include <math.h>
 

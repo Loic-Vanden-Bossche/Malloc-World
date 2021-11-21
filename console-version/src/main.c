@@ -1,7 +1,13 @@
 #include "../headers/main.h"
-int main() {
+int main(int argc, char **argv) {
 
     int exit = 0;
+
+    for (int i = 0; i < argc; ++i) {
+        if(strcmp(argv[i], "--debug") == 0){
+            setDebug(1);
+        }
+    }
 
     while(!exit){
 
