@@ -64,7 +64,7 @@ void parseMapData(FILE * f, map* worldMap){
         for (int i = 0; i < MAP_SIZE_Y; ++i) {
             fgets(buffer, BUFFER_LENGTH, f);
 
-            char* strToken = strtok (buffer, " ");
+            char* strToken = strtok(buffer, " ");
 
             int tokCount = 0;
 
@@ -174,8 +174,6 @@ int parseStorageData(FILE *f, storageNode** storage) {
                &newItem.durabitity
         );
 
-        printf("%d", newItem.id);
-
         appendToStorage(storage, newItem);
     }
 
@@ -203,18 +201,19 @@ int parseSaveFile(map* worldMap, player* player, storageNode** storage){
     f = fopen(SAVE_FILE_LOCATION,"r");
 
     parseMapData(f, worldMap);
+    debug("Player data parsed\n");
 
     if(parsePlayerData(f, player)) {
-        printf("Player data successfully parsed\n");
+        debug("Player data successfully parsed\n");
     } else {
-        printf("Error occurred while parsing player data\n");
+        debug("Error occurred while parsing player data\n");
         return 0;
     }
 
     if(parseStorageData(f, storage)) {
-        printf("Storage data successfully parsed\n");
+        debug("Storage data successfully parsed\n");
     } else {
-        printf("Error occurred while parsing storage data\n");
+        debug("Error occurred while parsing storage data\n");
         return 0;
     }
 

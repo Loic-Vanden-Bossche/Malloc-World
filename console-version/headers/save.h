@@ -8,6 +8,7 @@
 #include "map.h"
 #include "player.h"
 #include "storage.h"
+#include "debugger.h"
 #include <stdio.h>
 #include <string.h>
 
