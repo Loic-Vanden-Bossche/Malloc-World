@@ -80,4 +80,6 @@ pathFindResult solveAStar(int** mapGrid,int xS,int yS,int xD,int yD);
 
 void displayAStarResults(pathFindResult res);
 
+void destroyPair(pairListNode *list);
+
 #endif //MALLOC_WORLD_PATHFIND_H

@@ -9,6 +9,8 @@ int main(int argc, char **argv) {
         }
     }
 
+    srand(time(NULL));
+
     while(!exit){
 
         switch (mainMenu()) {
