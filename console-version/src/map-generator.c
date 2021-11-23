@@ -11,7 +11,7 @@ typedef struct {
     int reps;
 } generation_params;
 
-int fillprob = 40;
+int fillprob = 12;
 int r1_cutoff = 5, r2_cutoff = 2;
 generation_params *params;
 
@@ -37,11 +37,6 @@ void initmap(int** grid, int** grid2)
     for(yi=0; yi<MAP_SIZE_Y; yi++)
         for(xi=0; xi<MAP_SIZE_X; xi++)
             grid2[yi][xi] = TILE_WALL;
-
-    /*for(yi=0; yi<MAP_SIZE_Y; yi++)
-        grid[yi][0] = grid[yi][MAP_SIZE_X-1] = TILE_WALL;
-    for(xi=0; xi<MAP_SIZE_X; xi++)
-        grid[0][xi] = grid[MAP_SIZE_Y-1][xi] = TILE_WALL;*/
 }
 
 void generation(int** grid, int** grid2)
@@ -84,8 +79,6 @@ int cellularAutomata(int** grid)
 {
     int ii, jj;
 
-    fillprob   = 12;
-
     generations = 1;
 
     params = params_set = (generation_params*)malloc( sizeof(generation_params) * generations );
@@ -96,7 +89,7 @@ int cellularAutomata(int** grid)
 
     int **grid2;
 
-    int yi;
+    int yi,xi;
 
     grid2 = (int**)malloc(sizeof(int*) * MAP_SIZE_Y);
 
@@ -113,6 +106,11 @@ int cellularAutomata(int** grid)
         for(jj=0; jj<params->reps; jj++)
             generation(grid, grid2);
     }
+
+    for(yi=0; yi<MAP_SIZE_Y; yi++)
+        grid[yi][0] = grid[yi][MAP_SIZE_X-1] = TILE_WALL;
+    for(xi=0; xi<MAP_SIZE_X; xi++)
+        grid[0][xi] = grid[MAP_SIZE_Y-1][xi] = TILE_WALL;
 
     for(yi=0; yi<MAP_SIZE_Y; yi++)
     {
@@ -143,17 +141,15 @@ void printCoordinate(coordinate coords){
     debug("(%d, %d)\n", coords.x, coords.y);
 }
 
-#define TOTAL_RESOURCE_RT 0.12
+#define TOTAL_RESOURCE_RT 0.07
 
-void populateMap(map* worldMap) {
+void populateMap(int** grid) {
 
     coordinate coords;
 
     pathFindResult pRes;
 
     int isBlocked;
-
-    int itCount = 0;
 
     const int totalResources = (MAP_SIZE_X*MAP_SIZE_Y) * TOTAL_RESOURCE_RT;
 
@@ -165,18 +161,18 @@ void populateMap(map* worldMap) {
             pRes.path = NULL;
 
             coords = getRandomCoordinate();
-            isBlocked = worldMap->lvl[0][coords.y][coords.x] != 0;
+            isBlocked = grid[coords.y][coords.x] != 0;
 
             if(!isBlocked) {
-                pRes = solveAStar(worldMap->lvl[0], 0, 0, coords.x, coords.y);
+                grid[coords.y][coords.x] = 2;
+                pRes = solveAStar(grid, 1, 1, 148, 38);
+                destroyPair(pRes.path);
+
+                if(pRes.solved != 1) {
+                    grid[coords.y][coords.x] = 0;
+                }
             }
 
-            itCount++;
-
         } while(isBlocked || pRes.solved != 1);
-
-        printCoordinate(coords);
-
-        worldMap->lvl[0][coords.y][coords.x] = 2;
     }
 }

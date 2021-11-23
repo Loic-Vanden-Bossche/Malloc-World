@@ -84,7 +84,10 @@ pPairListNode* removePPairFirstNode(pPairListNode* head)
     if (head == NULL)
         return NULL;
 
+    pPairListNode* temp = head;
     head = head->next;
+
+    free(temp);
 
     return head;
 }
@@ -95,12 +98,15 @@ pairListNode* removePairLastNode(pairListNode* head)
         return NULL;
 
     if (head->next == NULL) {
+        free(head);
         return NULL;
     }
 
     pairListNode* second_last = head;
     while (second_last->next->next != NULL)
         second_last = second_last->next;
+
+    free(second_last->next);
 
     second_last->next = NULL;
 
@@ -141,7 +147,7 @@ pairListNode* tracePath(cell cellDetails[][MAP_SIZE_X], Pair dest)
     int row = dest.first;
     int col = dest.second;
 
-    pairListNode * path = NULL;
+    pairListNode* path = NULL;
 
     while (!(cellDetails[row][col].parent_i == row
              && cellDetails[row][col].parent_j == col)) {
@@ -198,6 +204,30 @@ void displayAStarResults(pathFindResult res) {
 pathFindResult formatResult(pairListNode* path,int solved){
     pathFindResult res = { path, solved };
     return res;
+}
+
+void destroyPair(pairListNode* path){
+
+    pairListNode* tmp;
+
+    while (path != NULL)
+    {
+        tmp = path;
+        path = path->next;
+        free(tmp);
+    }
+}
+
+void destroyPPair(pPairListNode* path){
+
+    pPairListNode* tmp;
+
+    while (path != NULL)
+    {
+        tmp = path;
+        path = path->next;
+        free(tmp);
+    }
 }
 
 pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
@@ -509,7 +539,7 @@ pathFindResult solveAStar(int** mapGrid,int xS,int yS,int xD,int yD)
 
     for (int i = 0; i < MAP_SIZE_Y; ++i) {
         for (int j = 0; j < MAP_SIZE_X; ++j) {
-            if(mapGrid[i][j] == 0) {
+            if(mapGrid[i][j] == 0 || mapGrid[i][j] == 1) {
                 grid[i][j] = 1;
             } else {
                 grid[i][j] = 0;
