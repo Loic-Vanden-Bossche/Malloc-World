@@ -76,6 +76,8 @@ void generateMap(map* worldMap){
 
     pathFindResult res;
 
+    float fillProb = 0.0;
+
     for (int lvl = 0; lvl < 3; ++lvl) {
 
         debug("Generate lvl : %d\n", lvl);
@@ -108,9 +110,13 @@ void generateMap(map* worldMap){
                 }
             }
         }
-        debug("\t- Fill prob : %f\n", (count/(float)(MAP_SIZE_X*MAP_SIZE_Y)));
-        debug("\t- Populating lvl\n\n");
-        populateMap(worldMap->lvl[lvl]);
+
+        fillProb = (count/(float)(MAP_SIZE_X*MAP_SIZE_Y));
+
+        debug("\t- Fill prob : %f\n", fillProb);
+        debug("\t- Populating lvl\n");
+        populateMap(worldMap->lvl[lvl], lvl, fillProb);
+        debug("`\n");
     }
 }
 

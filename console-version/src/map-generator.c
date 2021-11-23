@@ -127,12 +127,17 @@ typedef struct Coordinate {
     int y;
 } coordinate;
 
+int getRandomNumber(int lower, int upper) {
+
+    return (rand() % (upper - lower + 1)) + lower;
+}
+
 coordinate getRandomCoordinate(){
 
     coordinate res = {0, 0};
 
-    res.x = (rand() % (MAP_SIZE_X - 2)) + 1;
-    res.y = (rand() % (MAP_SIZE_Y - 2)) + 1;
+    res.x = getRandomNumber(1, MAP_SIZE_X - 1);
+    res.y = getRandomNumber(1, MAP_SIZE_Y - 1);
 
     return res;
 }
@@ -141,19 +146,76 @@ void printCoordinate(coordinate coords){
     debug("(%d, %d)\n", coords.x, coords.y);
 }
 
-#define TOTAL_RESOURCE_RT 0.07
+#define TOTAL_ELEMENTS_RT 0.2
 
-void populateMap(int** grid) {
+typedef enum MapElementType {
+    MINERAL,
+    WOOD,
+    PLANT,
+    MONSTER
+} mapElementType;
+
+mapElementType getRandomMapElementType() {
+
+    float weights[4] = { 0.45, 0.25, 0.2, 0.1 };
+    int results[4] = { PLANT, MONSTER, WOOD, MINERAL };
+
+    float x = (float)rand()/(float)(RAND_MAX/1);
+
+    float num = x;
+    float s = 0;
+    int lastIndex = 4 - 1;
+
+    for (int i = 0; i < lastIndex; ++i) {
+        s += weights[i];
+        if (num < s) {
+            return results[i];
+        }
+    }
+
+    return results[lastIndex];
+}
+
+int getRandomMonster(int lvl){
+
+    switch (lvl) {
+        case 0:
+            return getRandomNumber(12, 40);
+        case 1:
+            return getRandomNumber(41, 69);
+        case 2:
+            return getRandomNumber(70, 98);
+        default:
+            return 12;
+    }
+}
+
+int getElementFromType(mapElementType type, int lvl){
+
+    int startId = 3 + (lvl*3);
+
+    switch (type) {
+        case PLANT:
+            return startId;
+        case MINERAL:
+            return startId+1;
+        case WOOD:
+            return startId+2;
+        case MONSTER:
+            return getRandomMonster(lvl);
+    }
+}
+
+void populateMap(int** grid, int lvl, float fillProb) {
 
     coordinate coords;
-
     pathFindResult pRes;
-
     int isBlocked;
+    mapElementType type;
+    const int totalElements = ((MAP_SIZE_X*MAP_SIZE_Y) * fillProb) * TOTAL_ELEMENTS_RT;
+    int totalElementTypes[4] = {0};
 
-    const int totalResources = (MAP_SIZE_X*MAP_SIZE_Y) * TOTAL_RESOURCE_RT;
-
-    for (int i = 0; i < totalResources; ++i) {
+    for (int i = 0; i < totalElements; ++i) {
 
         do {
 
@@ -164,7 +226,8 @@ void populateMap(int** grid) {
             isBlocked = grid[coords.y][coords.x] != 0;
 
             if(!isBlocked) {
-                grid[coords.y][coords.x] = 2;
+                type = getRandomMapElementType();
+                grid[coords.y][coords.x] = getElementFromType(type, lvl);
                 pRes = solveAStar(grid, 1, 1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
                 destroyPair(pRes.path);
 
@@ -174,5 +237,25 @@ void populateMap(int** grid) {
             }
 
         } while(isBlocked || pRes.solved != P_FOUND);
+
+        switch (type) {
+            case PLANT:
+                totalElementTypes[0]++;
+                break;
+            case WOOD:
+                totalElementTypes[1]++;
+                break;
+            case MINERAL:
+                totalElementTypes[2]++;
+                break;
+            case MONSTER:
+                totalElementTypes[3]++;
+                break;
+        }
     }
+
+    debug("\t\t - Plant prob : %f\n", (float)totalElementTypes[0]/totalElements);
+    debug("\t\t - Wood prob : %f\n", (float)totalElementTypes[1]/totalElements);
+    debug("\t\t - Mineral prob : %f\n", (float)totalElementTypes[2]/totalElements);
+    debug("\t\t - Monster prob : %f\n", (float)totalElementTypes[3]/totalElements);
 }

@@ -12,6 +12,6 @@
 #include "pathfind.h"
 
 int cellularAutomata(int** grid);
-void populateMap(int** grid);
+void populateMap(int** grid, int lvl, float fillProb);
 
 #endif //MALLOC_WORLD_MAP_GENERATOR_H
