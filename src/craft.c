@@ -57,34 +57,37 @@ const craft craftList[25] = {
         },
 
         
-};
-void printItemData(int id) {
+}; 
+const craft* getCraftsData() {
+        return craftList;
+                
+    }
+const craft* getCraftData(int Zone) {
+    for (int i = 0; i < craftCount; ++i) {
+             for (int j = 0; j < 3  ; j++) {
+                 if(craftList[i].avaliableZones[j] == Zone){
+                        return &craftList[i];
+                 } 
+                        
+             }
+    }
 
-    const craft* data = getCraftData(id);
+   
+}
+   
+
+void printCraftData(int id) {
+
+    const craft* data = getCraftsData(id);
 
         printf("Infos de l'craft : %s\n", data->id);
         printf("\ttargetItemId : %d\n", data->targetItemId);
         printf("\tingredient : %d\n", data->ingredient->id);
         printf("\tingredient : %d\n", data->ingredient->qty);
         printf("\tingNumber : %d\n", data->ingNumber);
+        
         printf("\tavaliableZones : %d\n", data->avaliableZones);
            
-}
-const craft* getCraftData(int Zone) {
-    for (int i = 0; i < craftCount; ++i) {
-             for (int j = 0; j < 3  ; j++) {
-                 if(craftList[i].avaliableZones[j] == Zone){
-                         return &craftList[i];
-                 } 
-                        
-             }
-    }
-
-    return NULL;
-}
-
-const itemData* getCraftsData() {
-    return craftList;
 }
 
 item* craftItem ( item* items,int itemId){
