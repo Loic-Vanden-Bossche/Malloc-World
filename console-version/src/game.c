@@ -88,7 +88,7 @@ void generateMap(map* worldMap){
 
             res = solveAStar(worldMap->lvl[lvl], 1,1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
             destroyPair(res.path);
-        } while(res.solved != 1);
+        } while(res.solved != P_FOUND);
 
         int count = 0;
 
@@ -99,7 +99,7 @@ void generateMap(map* worldMap){
                 if (worldMap->lvl[lvl][i][j] == 0) {
                     res = solveAStar(worldMap->lvl[lvl], 1, 1, j, i);
                     destroyPair(res.path);
-                    if (res.solved != 1 && res.solved != -3) {
+                    if (res.solved != P_FOUND && res.solved != P_ALREADY_AT_DESTINATION) {
                         worldMap->lvl[lvl][i][j] = -1;
                         count++;
                     }
@@ -115,8 +115,6 @@ void generateMap(map* worldMap){
 }
 
 int game(map* worldMap, player* player, storageNode* storage) {
-
-    displayAStarResults(solveAStar(worldMap->lvl[worldMap->currentLvl], 1, 1, 5, 20));
 
     char ch = 0;
 

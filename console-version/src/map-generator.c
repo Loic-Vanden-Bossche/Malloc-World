@@ -157,7 +157,7 @@ void populateMap(int** grid) {
 
         do {
 
-            pRes.solved = 0;
+            pRes.solved = P_NOT_FOUND;
             pRes.path = NULL;
 
             coords = getRandomCoordinate();
@@ -165,14 +165,14 @@ void populateMap(int** grid) {
 
             if(!isBlocked) {
                 grid[coords.y][coords.x] = 2;
-                pRes = solveAStar(grid, 1, 1, 148, 38);
+                pRes = solveAStar(grid, 1, 1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
                 destroyPair(pRes.path);
 
-                if(pRes.solved != 1) {
+                if(pRes.solved != P_FOUND) {
                     grid[coords.y][coords.x] = 0;
                 }
             }
 
-        } while(isBlocked || pRes.solved != 1);
+        } while(isBlocked || pRes.solved != P_FOUND);
     }
 }
