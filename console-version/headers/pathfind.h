@@ -44,10 +44,20 @@ typedef struct PairListNode {
     struct PairListNode* next;
 } pairListNode;
 
+enum pResCode {
+    P_FOUND,
+    P_INVALID_SRC,
+    P_INVALID_DST,
+    P_SRC_OR_DST_BLOCKED,
+    P_ALREADY_AT_DESTINATION,
+    P_NOT_FOUND,
+    P_UNKNOWN
+};
+
 typedef struct PathFindResult {
 
     pairListNode* path;
-    int solved;
+    enum pResCode solved;
 
 } pathFindResult;
 

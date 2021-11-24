@@ -169,22 +169,22 @@ pairListNode* tracePath(cell cellDetails[][MAP_SIZE_X], Pair dest)
 void displayAStarResults(pathFindResult res) {
 
     switch (res.solved) {
-        case 1:
+        case P_FOUND:
             debug("The destination cell is found\n");
             break;
-        case 0:
+        case P_INVALID_SRC:
             debug("Source is invalid\n");
             return;
-        case -1:
+        case P_INVALID_DST:
             debug("Destination is invalid\n");
             return;
-        case -2:
+        case P_SRC_OR_DST_BLOCKED:
             debug("Source or the destination is blocked\n");
             return;
-        case -3:
+        case P_ALREADY_AT_DESTINATION:
             debug("We are already at the destination\n");
             return;
-        case -4:
+        case P_NOT_FOUND:
             debug("Failed to find the Destination Cell\n");
             return;
         default:
@@ -201,7 +201,7 @@ void displayAStarResults(pathFindResult res) {
     debug("\n");
 }
 
-pathFindResult formatResult(pairListNode* path,int solved){
+pathFindResult formatResult(pairListNode* path,enum pResCode solved){
     pathFindResult res = { path, solved };
     return res;
 }
@@ -233,22 +233,22 @@ void destroyPPair(pPairListNode* path){
 pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 {
     if (isValid(src.first, src.second) == 0) {
-        return formatResult(NULL, 0);
+        return formatResult(NULL, P_INVALID_SRC);
     }
 
     if (isValid(dest.first, dest.second) == 0) {
-        return formatResult(NULL, -1);
+        return formatResult(NULL, P_INVALID_DST);
     }
 
     if (isUnBlocked(grid, src.first, src.second) == 0
         || isUnBlocked(grid, dest.first, dest.second)
            == 0) {
-        return formatResult(NULL, -2);
+        return formatResult(NULL, P_SRC_OR_DST_BLOCKED);
     }
 
     if (isDestination(src.first, src.second, dest)
         == 1) {
-        return formatResult(NULL, -3);
+        return formatResult(NULL, P_ALREADY_AT_DESTINATION);
     }
 
     int closedList[MAP_SIZE_Y][MAP_SIZE_X];
@@ -297,7 +297,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 
                 cellDetails[i - 1][j].parent_i = i;
                 cellDetails[i - 1][j].parent_j = j;
-                return formatResult(tracePath(cellDetails, dest), 1);
+                return formatResult(tracePath(cellDetails, dest), P_FOUND);
             } else if (closedList[i - 1][j] == 0
                      && isUnBlocked(grid, i - 1, j)
                         == 1) {
@@ -323,7 +323,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 
                 cellDetails[i + 1][j].parent_i = i;
                 cellDetails[i + 1][j].parent_j = j;
-                return formatResult(tracePath(cellDetails, dest), 1);
+                return formatResult(tracePath(cellDetails, dest), P_FOUND);
 
             } else if (closedList[i + 1][j] == 0
                      && isUnBlocked(grid, i + 1, j)
@@ -351,7 +351,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 
                 cellDetails[i][j + 1].parent_i = i;
                 cellDetails[i][j + 1].parent_j = j;
-                return formatResult(tracePath(cellDetails, dest), 1);
+                return formatResult(tracePath(cellDetails, dest), P_FOUND);
             }
 
             else if (closedList[i][j + 1] == 0
@@ -382,7 +382,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
                 cellDetails[i][j - 1].parent_i = i;
                 cellDetails[i][j - 1].parent_j = j;
 
-                return formatResult(tracePath(cellDetails, dest), 1);
+                return formatResult(tracePath(cellDetails, dest), P_FOUND);
             }
 
             else if (closedList[i][j - 1] == 0
@@ -413,7 +413,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 
                     cellDetails[i - 1][j + 1].parent_i = i;
                     cellDetails[i - 1][j + 1].parent_j = j;
-                    return formatResult(tracePath(cellDetails, dest), 1);
+                    return formatResult(tracePath(cellDetails, dest), P_FOUND);
                 }
 
                 else if (closedList[i - 1][j + 1] == 0
@@ -442,7 +442,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 
                     cellDetails[i - 1][j - 1].parent_i = i;
                     cellDetails[i - 1][j - 1].parent_j = j;
-                    return formatResult(tracePath(cellDetails, dest), 1);
+                    return formatResult(tracePath(cellDetails, dest), P_FOUND);
                 }
 
                 else if (closedList[i - 1][j - 1] == 0
@@ -471,7 +471,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 
                     cellDetails[i + 1][j + 1].parent_i = i;
                     cellDetails[i + 1][j + 1].parent_j = j;
-                    return formatResult(tracePath(cellDetails, dest), 1);
+                    return formatResult(tracePath(cellDetails, dest), P_FOUND);
                 }
 
                 else if (closedList[i + 1][j + 1] == 0
@@ -502,7 +502,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
 
                     cellDetails[i + 1][j - 1].parent_i = i;
                     cellDetails[i + 1][j - 1].parent_j = j;
-                    return formatResult(tracePath(cellDetails, dest), 1);
+                    return formatResult(tracePath(cellDetails, dest), P_FOUND);
                 }
 
                 else if (closedList[i + 1][j - 1] == 0
@@ -529,7 +529,7 @@ pathFindResult aStarSearch(int grid[][MAP_SIZE_X], Pair src, Pair dest)
         }
     }
 
-    return formatResult(NULL, -4);
+    return formatResult(NULL, P_NOT_FOUND);
 }
 
 pathFindResult solveAStar(int** mapGrid,int xS,int yS,int xD,int yD)
