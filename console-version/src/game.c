@@ -143,8 +143,7 @@ int game(map* worldMap, player* player, storageNode* storage) {
                 break;
         }
 
-        fflush(stdin);
-        ch = getchar();
+        scanf(" %c", &ch);
 
     } while (ch != 'a');
 
