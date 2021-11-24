@@ -9,6 +9,6 @@
 #include <stdio.h>
 
 void debug(const char *fmt, ...);
-void setDebug(int isDebug);
+void setDebug();
 
 #endif //MALLOC_WORLD_DEBUGGER_H

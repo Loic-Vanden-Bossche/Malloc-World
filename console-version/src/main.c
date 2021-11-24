@@ -5,7 +5,11 @@ int main(int argc, char **argv) {
 
     for (int i = 0; i < argc; ++i) {
         if(strcmp(argv[i], "--debug") == 0){
-            setDebug(1);
+            setDebug();
+        }
+
+        if(strcmp(argv[i], "--unicode") == 0){
+            setUnicode();
         }
     }
 

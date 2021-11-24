@@ -157,21 +157,3 @@ void destroyMap(map *worldMap) {
 
     free(worldMap->lvl);
 }
-
-void displayMap(int** grid) {
-
-    int xi, yi;
-
-    for(yi=0; yi<MAP_SIZE_Y; yi++)
-    {
-        for(xi=0; xi<MAP_SIZE_X; xi++)
-        {
-            switch(grid[yi][xi]) {
-                case TILE_WALL:  putchar('#'); break;
-                case TILE_FLOOR: putchar('.'); break;
-                default: printf("%d", grid[yi][xi]);
-            }
-        }
-        putchar('\n');
-    }
-}
