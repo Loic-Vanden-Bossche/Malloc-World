@@ -10,6 +10,7 @@
 #include "./player.h"
 #include "storage.h"
 #include "pathfind.h"
+#include "display.h"
 
 #define clrscr() printf("\e[1;1H\e[2J")
 
