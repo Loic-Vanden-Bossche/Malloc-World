@@ -17,7 +17,7 @@ void debug(const char *fmt, ...)
     }
 }
 
-void setDebug(int debug) {
+void setDebug() {
 
-    isDebug = debug;
+    isDebug = 1;
 };

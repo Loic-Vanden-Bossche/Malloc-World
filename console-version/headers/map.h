@@ -35,8 +35,6 @@ map* createMap(int startLvl);
 
 void destroyMap(map* worldMap);
 
-void displayMap(int** grid);
-
 #include "map-generator.h"
 
 #endif //MALLOC_WORLD_MAP_H
