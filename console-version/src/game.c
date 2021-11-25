@@ -64,61 +64,6 @@ int displayConfirm(char* message) {
     }
 }
 
-void resetMap(int** grid) {
-    for (int i = 0; i < MAP_SIZE_Y; ++i) {
-        for (int j = 0; j < MAP_SIZE_X; ++j) {
-            grid[i][j] = 0;
-        }
-    }
-}
-
-void generateMap(map* worldMap){
-
-    pathFindResult res;
-
-    float fillProb = 0.0;
-
-    for (int lvl = 0; lvl < 3; ++lvl) {
-
-        debug("Generate lvl : %d\n", lvl);
-
-        debug("\t- Generating skeleton\n");
-
-        do {
-            resetMap(worldMap->lvl[lvl]);
-            cellularAutomata(worldMap->lvl[lvl]);
-
-            res = solveAStar(worldMap->lvl[lvl], 1,1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
-            destroyPair(res.path);
-        } while(res.solved != P_FOUND);
-
-        int count = 0;
-
-        debug("\t- Filling unreachable spaces\n");
-
-        for (int i = 0; i < MAP_SIZE_Y; ++i) {
-            for (int j = 0; j < MAP_SIZE_X; ++j) {
-                if (worldMap->lvl[lvl][i][j] == 0) {
-                    res = solveAStar(worldMap->lvl[lvl], 1, 1, j, i);
-                    destroyPair(res.path);
-                    if (res.solved != P_FOUND && res.solved != P_ALREADY_AT_DESTINATION) {
-                        worldMap->lvl[lvl][i][j] = -1;
-                        count++;
-                    }
-                } else {
-                    count++;
-                }
-            }
-        }
-
-        fillProb = (count/(float)(MAP_SIZE_X*MAP_SIZE_Y));
-
-        debug("\t- Fill prob : %f\n", fillProb);
-        debug("\t- Populating lvl\n");
-        populateMap(worldMap->lvl[lvl], lvl, fillProb);
-        debug("`\n");
-    }
-}
 
 int game(map* worldMap, player* player, storageNode* storage) {
 
