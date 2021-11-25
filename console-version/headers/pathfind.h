@@ -13,8 +13,6 @@
 #define ROW 9
 #define COL 10
 
-#define INCLUDE_DIAGS 0
-
 #define FLT_MAX 99999999.0
 
 typedef struct Pair {
