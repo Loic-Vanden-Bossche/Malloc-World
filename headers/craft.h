@@ -15,9 +15,9 @@ int avaliableZones[3];
 } craft;
 
  void showCraftLvl (int zone);
- 
  item* craftItem ( item* items,int idCraft);
-
+ craft* getCraftData(int Zone);
+ void printCraftDataById(int id) ;
 
 
 

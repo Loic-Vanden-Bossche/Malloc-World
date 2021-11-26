@@ -62,34 +62,54 @@ const craft* getCraftsData() {
         return craftList;
                 
     }
-const craft* getCraftData(int Zone) {
-    for (int i = 0; i < craftCount; ++i) {
-             for (int j = 0; j < 3  ; j++) {
-                 if(craftList[i].avaliableZones[j] == Zone){
-                        return &craftList[i];
-                 } 
-                        
-             }
-    }
 
-   
-}
-   
-
-void printCraftData(int id) {
-
-    const craft* data = getCraftsData(id);
-
-        printf("Infos de l'craft : %s\n", data->id);
-        printf("\ttargetItemId : %d\n", data->targetItemId);
-        printf("\tingredient : %d\n", data->ingredient->id);
-        printf("\tingredient : %d\n", data->ingredient->qty);
-        printf("\tingNumber : %d\n", data->ingNumber);
+const craft* getCraftDataByZone(int Zone) 
+{
+    int t=0;
+    craft tabCraft[25];
+    for (int i = 0; i < craftCount; ++i) 
+    {
+        for (int j = 0; j < 3  ; j++) 
+        {
+            if(craftList[i].avaliableZones[j] == Zone)
+            {
+                tabCraft[t]=craftList[i];
+                t++;
+            }
         
-        printf("\tavaliableZones : %d\n", data->avaliableZones);
-           
+
+        }
+   
+   
+    }
 }
+const craft getCraftDataByid(int id) {
+    for (int i = 0; i < craftCount; ++i) {
+        if(craftList[i].id == id){
+            return craftList[i];
+        }
+    } 
+                        
+}
+    
+void printCraftDataById(int id) {
+
+    const craft data = getCraftDataByid(id);
+
+        printf("\tId de l'craft : %d\n", data.id);
+        printf("\ttargetItemId : %d\n", data.targetItemId);
+        printf("\tingredient : %d\n", data.ingredient->id);
+        printf("\tingredient : %d\n", data.ingredient->qty);
+        printf("\tingNumber : %d\n", data.ingNumber);
+        for ( int i=0;i<3;i++){
+            printf("\tavaliableZones : %d\n", data.avaliableZones[i]);
+
+        }
+        
+}
+
 
 item* craftItem ( item* items,int itemId){
 return NULL;
+
 }
