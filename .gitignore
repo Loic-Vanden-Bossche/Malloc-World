@@ -1,7 +1,8 @@
 # Custom
 cmake-build-debug
 .idea
-./saveFile.txt
+saveFile.txt
+SDL2-Library
 
 # Prerequisites
 *.d

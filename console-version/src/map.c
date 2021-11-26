@@ -122,20 +122,22 @@ int elementIsInLvl(mapElement element, int targetLvl) {
     return 0;
 }
 
-map *createMap(int startLvl, int mapSize) {
+map *createMap(int startLvl) {
 
-    map *newMap = malloc(sizeof(newMap));
-    newMap->mapSize = mapSize;
+    map *newMap = malloc(sizeof(map));
     newMap->currentLvl = startLvl;
 
-    newMap->lvl = malloc(3*sizeof(int**));
+    newMap->currentCoords.x = -1;
+    newMap->currentCoords.y = -1;
+
+    newMap->lvl = (int***)malloc(3*sizeof(int**));
 
     for (int lvl = 0; lvl < 3; lvl++) {
-        newMap->lvl[lvl] = malloc(mapSize*sizeof(int*));
-        for (int i = 0; i < mapSize; i++) {
-            newMap->lvl[lvl][i] = malloc(mapSize*sizeof(int));
+        newMap->lvl[lvl] = (int**)malloc(MAP_SIZE_Y*sizeof(int*));
+        for (int i = 0; i < MAP_SIZE_Y; i++) {
+            newMap->lvl[lvl][i] = (int*)malloc(MAP_SIZE_X*sizeof(int));
 
-            for (int j = 0; j < mapSize; ++j) {
+            for (int j = 0; j < MAP_SIZE_X; ++j) {
                 newMap->lvl[lvl][i][j] = 0;
             }
         }
@@ -146,26 +148,36 @@ map *createMap(int startLvl, int mapSize) {
 
 void destroyMap(map *worldMap) {
 
-    for (int lvl = 0; lvl < 3; ++lvl) {
-        for (int i = 0; i < worldMap->mapSize; ++i) {
-            free(worldMap->lvl[lvl][i]);
+    for(int lvl = 0; lvl < 3;lvl++) {
+        for(int yi = 0;yi < MAP_SIZE_Y;yi++) {
+            free(worldMap->lvl[lvl][yi]);
         }
-    }
-
-    for (int lvl = 0; lvl < 3; ++lvl) {
         free(worldMap->lvl[lvl]);
     }
 
     free(worldMap->lvl);
+    free(worldMap);
 }
 
-void displayMap(map worldMap) {
+int setCurrentCoordinate(map* worldMap, int x, int y) {
 
-    for (int i = 0; i < worldMap.mapSize; ++i) {
-        for (int j = 0; j < worldMap.mapSize; ++j) {
-            printf("%d", worldMap.lvl[worldMap.currentLvl][i][j]);
+    if(x >= MAP_SIZE_X - 1 || y >= MAP_SIZE_Y - 1) return -1;
+
+    const int targetMapElem = worldMap->lvl[worldMap->currentLvl][y][x];
+
+    if(targetMapElem == 0){
+
+        if(worldMap->currentCoords.x != -1 && worldMap->currentCoords.y != -1) {
+            worldMap->lvl[worldMap->currentLvl][worldMap->currentCoords.y][worldMap->currentCoords.x] = 0;
         }
-        printf("\n");
-    }
-}
 
+        worldMap->currentCoords.x = x;
+        worldMap->currentCoords.y = y;
+
+        debug("Player is at (%d, %d)\n", worldMap->currentCoords.x, worldMap->currentCoords.y);
+
+        worldMap->lvl[worldMap->currentLvl][y][x] = 1;
+    }
+
+    return targetMapElem;
+}

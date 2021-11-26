@@ -8,6 +8,18 @@
 #include "stdlib.h"
 #include "stdio.h"
 
+
+#define MAP_SIZE_X 150
+#define MAP_SIZE_Y 40
+
+#define TILE_FLOOR 0
+#define TILE_WALL -1
+
+typedef struct Coordinate {
+    int x;
+    int y;
+} coordinate;
+
 typedef struct MapElement {
 
   int value;
@@ -18,17 +30,19 @@ typedef struct MapElement {
 
 typedef struct Map {
     int currentLvl;
-    int mapSize;
+    coordinate currentCoords;
     int ***lvl;
 } map;
 
 const mapElement* getMapElements();
 int elementIsInLvl(mapElement element, int targetLvl);
 
-map* createMap(int startLvl, int mapSize);
+map* createMap(int startLvl);
 
-void destroyMap(map *worldMap);
+void destroyMap(map* worldMap);
 
-void displayMap(map worldMap);
+int setCurrentCoordinate(map* worldMap, int x, int y);
+
+#include "map-generator.h"
 
 #endif //MALLOC_WORLD_MAP_H
