@@ -73,7 +73,7 @@ void parseMapData(FILE * f, map* worldMap){
 
                 tokCount++;
 
-                if(tokCount > MAP_SIZE_X) break;
+                if(tokCount >= MAP_SIZE_X) break;
 
                 strToken = strtok(NULL, " ");
             }
