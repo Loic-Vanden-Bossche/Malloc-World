@@ -53,34 +53,59 @@ int displayConfirm(char* message) {
     }
 }
 
+#include <stdio.h>
+void clean_stdin(void)
+{
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
+}
+
 int game(map* worldMap, player* player, storageNode* storage) {
 
     char ch = 0;
 
+    int contextAction;
+
     do
     {
+        contextAction = -10;
+
         switch (ch) {
             case 's':
                 debug("Moving DOWN\n");
-                setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y+1);
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y+1);
                 break;
             case 'z':
                 debug("Moving UP\n");
-                setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y-1);
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y-1);
                 break;
             case 'd':
                 debug("Moving RIGHT\n");
-                setCurrentCoordinate(worldMap, worldMap->currentCoords.x+1, worldMap->currentCoords.y);
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x+1, worldMap->currentCoords.y);
                 break;
             case 'q':
                 debug("Moving LEFT\n");
-                setCurrentCoordinate(worldMap, worldMap->currentCoords.x-1, worldMap->currentCoords.y);
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x-1, worldMap->currentCoords.y);
                 break;
         }
 
         displayMap(worldMap);
 
-        fflush(stdin);
+        switch (contextAction) {
+            case -1:
+                debug("Destination is blocked or invalid\n");
+                break;
+            case 0:
+                debug("Player moved successfully\n");
+                break;
+            default:
+                debug("Action : %d\n", contextAction);
+                break;
+        }
+
+        clean_stdin();
         scanf(" %c", &ch);
 
     } while (ch != 'a');
