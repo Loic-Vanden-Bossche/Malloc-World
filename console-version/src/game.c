@@ -4,17 +4,6 @@
 
 #include "../headers/game.h"
 
-void display(map* worldMap, player* player, storageNode* storage) {
-
-    clrscr();
-
-    for (int i = 0; i < 3; ++i)
-        displayMap(worldMap->lvl[i]);
-
-    displayPlayerInfos(player);
-    printStorage(storage);
-}
-
 int mainMenu() {
 
     clrscr();
@@ -64,85 +53,59 @@ int displayConfirm(char* message) {
     }
 }
 
-void resetMap(int** grid) {
-    for (int i = 0; i < MAP_SIZE_Y; ++i) {
-        for (int j = 0; j < MAP_SIZE_X; ++j) {
-            grid[i][j] = 0;
-        }
-    }
-}
-
-void generateMap(map* worldMap){
-
-    pathFindResult res;
-
-    float fillProb = 0.0;
-
-    for (int lvl = 0; lvl < 3; ++lvl) {
-
-        debug("Generate lvl : %d\n", lvl);
-
-        debug("\t- Generating skeleton\n");
-
-        do {
-            resetMap(worldMap->lvl[lvl]);
-            cellularAutomata(worldMap->lvl[lvl]);
-
-            res = solveAStar(worldMap->lvl[lvl], 1,1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
-            destroyPair(res.path);
-        } while(res.solved != P_FOUND);
-
-        int count = 0;
-
-        debug("\t- Filling unreachable spaces\n");
-
-        for (int i = 0; i < MAP_SIZE_Y; ++i) {
-            for (int j = 0; j < MAP_SIZE_X; ++j) {
-                if (worldMap->lvl[lvl][i][j] == 0) {
-                    res = solveAStar(worldMap->lvl[lvl], 1, 1, j, i);
-                    destroyPair(res.path);
-                    if (res.solved != P_FOUND && res.solved != P_ALREADY_AT_DESTINATION) {
-                        worldMap->lvl[lvl][i][j] = -1;
-                        count++;
-                    }
-                } else {
-                    count++;
-                }
-            }
-        }
-
-        fillProb = (count/(float)(MAP_SIZE_X*MAP_SIZE_Y));
-
-        debug("\t- Fill prob : %f\n", fillProb);
-        debug("\t- Populating lvl\n");
-        populateMap(worldMap->lvl[lvl], lvl, fillProb);
-        debug("`\n");
-    }
+#include <stdio.h>
+void clean_stdin(void)
+{
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
 }
 
 int game(map* worldMap, player* player, storageNode* storage) {
 
     char ch = 0;
 
+    int contextAction;
+
     do
     {
-        displayMap(worldMap->lvl[worldMap->currentLvl]);
+        contextAction = -10;
 
         switch (ch) {
             case 's':
-                printf("DOWN");
+                debug("Moving DOWN\n");
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y+1);
                 break;
             case 'z':
-                printf("UP");
+                debug("Moving UP\n");
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y-1);
                 break;
             case 'd':
-                printf("RIGHT");
+                debug("Moving RIGHT\n");
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x+1, worldMap->currentCoords.y);
                 break;
             case 'q':
-                printf("LEFT");
+                debug("Moving LEFT\n");
+                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x-1, worldMap->currentCoords.y);
                 break;
         }
 
+        displayMap(worldMap);
+
+        switch (contextAction) {
+            case -1:
+                debug("Destination is blocked or invalid\n");
+                break;
+            case 0:
+                debug("Player moved successfully\n");
+                break;
+            default:
+                debug("Action : %d\n", contextAction);
+                break;
+        }
+
+        clean_stdin();
         scanf(" %c", &ch);
 
     } while (ch != 'a');

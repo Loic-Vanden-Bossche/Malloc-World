@@ -13,5 +13,6 @@
 
 int cellularAutomata(int** grid);
 void populateMap(int** grid, int lvl, float fillProb);
+void generateMap(map* worldMap);
 
 #endif //MALLOC_WORLD_MAP_GENERATOR_H

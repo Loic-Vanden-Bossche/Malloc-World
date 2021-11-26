@@ -18,7 +18,7 @@ generation_params *params;
 generation_params *params_set;
 int generations;
 
-int randpick(void)
+int randPick(void)
 {
     if(rand()%100 < fillprob)
         return TILE_WALL;
@@ -26,17 +26,75 @@ int randpick(void)
         return TILE_FLOOR;
 }
 
-void initmap(int** grid, int** grid2)
+void initMap(int** grid, int** grid2)
 {
     int xi, yi;
 
     for(yi=1; yi<MAP_SIZE_Y-1; yi++)
         for(xi=1; xi<MAP_SIZE_X-1; xi++)
-            grid[yi][xi] = randpick();
+            grid[yi][xi] = randPick();
 
     for(yi=0; yi<MAP_SIZE_Y; yi++)
         for(xi=0; xi<MAP_SIZE_X; xi++)
             grid2[yi][xi] = TILE_WALL;
+}
+
+void resetMap(int** grid) {
+    for (int i = 0; i < MAP_SIZE_Y; ++i) {
+        for (int j = 0; j < MAP_SIZE_X; ++j) {
+            grid[i][j] = 0;
+        }
+    }
+}
+
+void generateMap(map* worldMap){
+
+    pathFindResult res;
+
+    float fillProb = 0.0;
+
+    for (int lvl = 0; lvl < 3; ++lvl) {
+
+        debug("Generate lvl : %d\n", lvl);
+
+        debug("\t- Generating skeleton\n");
+
+        do {
+            resetMap(worldMap->lvl[lvl]);
+            cellularAutomata(worldMap->lvl[lvl]);
+
+            res = solveAStar(worldMap->lvl[lvl], 1,1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
+            destroyPair(res.path);
+        } while(res.solved != P_FOUND);
+
+        int count = 0;
+
+        debug("\t- Filling unreachable spaces\n");
+
+        for (int i = 0; i < MAP_SIZE_Y; ++i) {
+            for (int j = 0; j < MAP_SIZE_X; ++j) {
+                if (worldMap->lvl[lvl][i][j] == 0) {
+                    res = solveAStar(worldMap->lvl[lvl], 1, 1, j, i);
+                    destroyPair(res.path);
+                    if (res.solved != P_FOUND && res.solved != P_ALREADY_AT_DESTINATION) {
+                        worldMap->lvl[lvl][i][j] = -1;
+                        count++;
+                    }
+                } else {
+                    count++;
+                }
+            }
+        }
+
+        fillProb = (count/(float)(MAP_SIZE_X*MAP_SIZE_Y));
+
+        debug("\t- Fill prob : %f\n", fillProb);
+        debug("\t- Populating lvl\n");
+        populateMap(worldMap->lvl[lvl], lvl, fillProb);
+        debug("`\n");
+
+        setCurrentCoordinate(worldMap, 1, 1);
+    }
 }
 
 void generation(int** grid, int** grid2)
@@ -98,7 +156,7 @@ int cellularAutomata(int** grid)
         grid2[yi] = (int*)malloc(sizeof(int) * MAP_SIZE_X);
     }
 
-    initmap(grid, grid2);
+    initMap(grid, grid2);
 
     for(ii=0; ii<generations; ii++)
     {
@@ -121,11 +179,6 @@ int cellularAutomata(int** grid)
 
     return 0;
 }
-
-typedef struct Coordinate {
-    int x;
-    int y;
-} coordinate;
 
 int getRandomNumber(int lower, int upper) {
 
@@ -258,4 +311,18 @@ void populateMap(int** grid, int lvl, float fillProb) {
     debug("\t\t - Wood prob : %f\n", (float)totalElementTypes[1]/totalElements);
     debug("\t\t - Mineral prob : %f\n", (float)totalElementTypes[2]/totalElements);
     debug("\t\t - Monster prob : %f\n", (float)totalElementTypes[3]/totalElements);
+
+    switch(lvl){
+        case 0:
+            grid[MAP_SIZE_Y - 2][MAP_SIZE_X - 2] = -2;
+            break;
+        case 1:
+            grid[1][1] = -2;
+            grid[MAP_SIZE_Y - 2][MAP_SIZE_X - 2] = -3;
+            break;
+        case 2:
+            grid[1][1] = -3;
+            grid[MAP_SIZE_Y - 2][MAP_SIZE_X - 2] = 99;
+            break;
+    }
 }

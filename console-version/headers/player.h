@@ -10,7 +10,6 @@
 #include "item.h"
 
 typedef struct Player {
-    char name[20];
     int hp;
     int maxHp;
     int xp;
