@@ -55,12 +55,10 @@ const craft craftList[25] = {
         },
          { 25,34,{2,29},1,{0, 0, 3}
         },
-
-        
+      
 }; 
 const craft* getCraftsData() {
-        return craftList;
-                
+        return craftList;           
     }
 
 const craft* getCraftDataByZone(int Zone) 
@@ -77,9 +75,7 @@ const craft* getCraftDataByZone(int Zone)
                 t++;
             }
         
-
         }
-   
    
     }
 }
@@ -89,23 +85,22 @@ const craft getCraftDataByid(int id) {
             return craftList[i];
         }
     } 
-                        
+
 }
     
 void printCraftDataById(int id) {
 
     const craft data = getCraftDataByid(id);
 
-        printf("\tId de l'craft : %d\n", data.id);
-        printf("\ttargetItemId : %d\n", data.targetItemId);
-        printf("\tingredient : %d\n", data.ingredient->id);
-        printf("\tingredient : %d\n", data.ingredient->qty);
-        printf("\tingNumber : %d\n", data.ingNumber);
-        for ( int i=0;i<3;i++){
-            printf("\tavaliableZones : %d\n", data.avaliableZones[i]);
+    printf("\tId de l'craft : %d\n", data.id);
+    printf("\ttargetItemId : %d\n", data.targetItemId);
+    printf("\tingredient : %d\n", data.ingredient->id);
+    printf("\tingredient : %d\n", data.ingredient->qty);
+    printf("\tingNumber : %d\n", data.ingNumber);
+    for ( int i=0;i<3;i++){
+        printf("\tavaliableZones : %d\n", data.avaliableZones[i]);
 
-        }
-        
+    }     
 }
 
 
