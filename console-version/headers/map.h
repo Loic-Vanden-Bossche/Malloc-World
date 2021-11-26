@@ -15,6 +15,11 @@
 #define TILE_FLOOR 0
 #define TILE_WALL -1
 
+typedef struct Coordinate {
+    int x;
+    int y;
+} coordinate;
+
 typedef struct MapElement {
 
   int value;
@@ -25,6 +30,7 @@ typedef struct MapElement {
 
 typedef struct Map {
     int currentLvl;
+    coordinate currentCoords;
     int ***lvl;
 } map;
 
@@ -34,6 +40,8 @@ int elementIsInLvl(mapElement element, int targetLvl);
 map* createMap(int startLvl);
 
 void destroyMap(map* worldMap);
+
+void setCurrentCoordinate(map* worldMap, int x, int y);
 
 #include "map-generator.h"
 

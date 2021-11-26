@@ -4,17 +4,6 @@
 
 #include "../headers/game.h"
 
-void display(map* worldMap, player* player, storageNode* storage) {
-
-    clrscr();
-
-    for (int i = 0; i < 3; ++i)
-        displayMap(worldMap->lvl[i]);
-
-    displayPlayerInfos(player);
-    printStorage(storage);
-}
-
 int mainMenu() {
 
     clrscr();
@@ -64,30 +53,34 @@ int displayConfirm(char* message) {
     }
 }
 
-
 int game(map* worldMap, player* player, storageNode* storage) {
 
     char ch = 0;
 
     do
     {
-        displayMap(worldMap->lvl[worldMap->currentLvl]);
-
         switch (ch) {
             case 's':
-                printf("DOWN");
+                debug("Moving DOWN\n");
+                setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y+1);
                 break;
             case 'z':
-                printf("UP");
+                debug("Moving UP\n");
+                setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y-1);
                 break;
             case 'd':
-                printf("RIGHT");
+                debug("Moving RIGHT\n");
+                setCurrentCoordinate(worldMap, worldMap->currentCoords.x+1, worldMap->currentCoords.y);
                 break;
             case 'q':
-                printf("LEFT");
+                debug("Moving LEFT\n");
+                setCurrentCoordinate(worldMap, worldMap->currentCoords.x-1, worldMap->currentCoords.y);
                 break;
         }
 
+        displayMap(worldMap);
+
+        fflush(stdin);
         scanf(" %c", &ch);
 
     } while (ch != 'a');

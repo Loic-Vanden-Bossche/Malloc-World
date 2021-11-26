@@ -92,6 +92,8 @@ void generateMap(map* worldMap){
         debug("\t- Populating lvl\n");
         populateMap(worldMap->lvl[lvl], lvl, fillProb);
         debug("`\n");
+
+        setCurrentCoordinate(worldMap, 1, 1);
     }
 }
 
@@ -177,11 +179,6 @@ int cellularAutomata(int** grid)
 
     return 0;
 }
-
-typedef struct Coordinate {
-    int x;
-    int y;
-} coordinate;
 
 int getRandomNumber(int lower, int upper) {
 
@@ -317,7 +314,6 @@ void populateMap(int** grid, int lvl, float fillProb) {
 
     switch(lvl){
         case 0:
-            grid[1][1] = 1;
             grid[MAP_SIZE_Y - 2][MAP_SIZE_X - 2] = -2;
             break;
         case 1:

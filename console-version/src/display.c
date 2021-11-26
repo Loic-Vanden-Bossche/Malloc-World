@@ -10,7 +10,7 @@ void setUnicode() {
     isUnicode = 1;
 }
 
-void displayMap(int** grid) {
+void displayGrid(int** grid) {
 
     int xi, yi;
     for(yi=0; yi<MAP_SIZE_Y; yi++)
@@ -20,6 +20,7 @@ void displayMap(int** grid) {
             switch(grid[yi][xi]) {
                 case TILE_WALL: isUnicode ? printf("\uE191") : putchar('#'); break;
                 case TILE_FLOOR: putchar(' '); break;
+                case -3 ... -2: isUnicode ? printf("\uE6DC") : putchar('S'); break;
                 case 1: isUnicode ? printf("\uE0E8") : putchar('1'); break;
                 case 2: isUnicode ? printf("\uE2E6") : putchar('2'); break;
                 case 3:
@@ -40,4 +41,9 @@ void displayMap(int** grid) {
         }
         putchar('\n');
     }
+}
+
+void displayMap(map* worldMap) {
+
+    displayGrid(worldMap->lvl[worldMap->currentLvl]);
 }

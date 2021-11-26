@@ -127,6 +127,9 @@ map *createMap(int startLvl) {
     map *newMap = malloc(sizeof(newMap));
     newMap->currentLvl = startLvl;
 
+    newMap->currentCoords.x = -1;
+    newMap->currentCoords.y = -1;
+
     newMap->lvl = malloc(3*sizeof(int**));
 
     for (int lvl = 0; lvl < 3; lvl++) {
@@ -156,4 +159,21 @@ void destroyMap(map *worldMap) {
     }
 
     free(worldMap->lvl);
+}
+
+void setCurrentCoordinate(map* worldMap, int x, int y) {
+
+    if(worldMap->lvl[worldMap->currentLvl][y][x] == 0){
+
+        if(worldMap->currentCoords.x != -1 && worldMap->currentCoords.y != -1) {
+            worldMap->lvl[worldMap->currentLvl][worldMap->currentCoords.y][worldMap->currentCoords.x] = 0;
+        }
+
+        worldMap->currentCoords.x = x;
+        worldMap->currentCoords.y = y;
+
+        debug("Player is at (%d, %d)\n", worldMap->currentCoords.x, worldMap->currentCoords.y);
+
+        worldMap->lvl[worldMap->currentLvl][y][x] = 1;
+    }
 }
