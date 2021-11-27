@@ -15,7 +15,6 @@ int fillprob = 12;
 int r1_cutoff = 5, r2_cutoff = 2;
 generation_params *params;
 
-generation_params *params_set;
 int generations;
 
 int randPick(void)
@@ -139,7 +138,7 @@ int cellularAutomata(int** grid)
 
     generations = 1;
 
-    params = params_set = (generation_params*)malloc( sizeof(generation_params) * generations );
+    params = (generation_params*)malloc( sizeof(generation_params) * generations );
 
     params->r1_cutoff  = 20;
     params->r2_cutoff  = 1;
@@ -160,7 +159,6 @@ int cellularAutomata(int** grid)
 
     for(ii=0; ii<generations; ii++)
     {
-        params = &params_set[ii];
         for(jj=0; jj<params->reps; jj++)
             generation(grid, grid2);
     }
@@ -176,6 +174,7 @@ int cellularAutomata(int** grid)
     }
 
     free(grid2);
+    free(params);
 
     return 0;
 }
