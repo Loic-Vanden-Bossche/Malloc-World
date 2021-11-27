@@ -8,6 +8,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "item.h"
+#include "craft.h"
 
 typedef struct Player {
     int hp;
@@ -31,4 +32,9 @@ void applyXp(player *player, int xp);
 void displayPlayerInfos(player* player);
 
 void displayPlayerInventory(item* inventory);
+
+int addItem(int itemId, item playerInventory[10]);
+
+int deleteItem(int itemId, item playerInventory[10]);
+
 #endif //MALLOC_WORLD_PLAYER_H

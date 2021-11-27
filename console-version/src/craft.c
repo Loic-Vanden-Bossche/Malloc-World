@@ -61,51 +61,92 @@ const craft* getCraftsData() {
         return craftList;           
     }
 
-const craft* getCraftDataByZone(int Zone) 
-{
-    int t=0;
-    craft tabCraft[25];
-    for (int i = 0; i < craftCount; ++i) 
-    {
-        for (int j = 0; j < 3  ; j++) 
-        {
-            if(craftList[i].avaliableZones[j] == Zone)
-            {
-                tabCraft[t]=craftList[i];
-                t++;
-            }
-        
-        }
-   
-    }
-}
-const craft getCraftDataByid(int id) {
+const craft* getCraftDataById(int id) {
     for (int i = 0; i < craftCount; ++i) {
         if(craftList[i].id == id){
-            return craftList[i];
+            return &craftList[i];
         }
-    } 
-
-}
-    
-void printCraftDataById(int id) {
-
-   
-    const  itemData* dataItem = getItemData(id);
-    const craft data = getCraftDataByid(id);
-    printf("\tname : %d\n", id," | ");
-    printf("\tname : %s\n", dataItem->name)," | ";
-    for(int i=0;i<3;i++){
-        int ing= data.ingredient[i].id;
-        const  itemData* ingData = getItemData(ing);
-        printf("\tingredient : %d\n", data.ingredient[i].qty," - ");
-        printf("\tname : %s\n",ingData->name," | " ); 
     }
-        
+
+    return NULL;
 }
 
 
-item* craftItem ( item* items,int itemId){
-return NULL;
+int isCraftable(int id, item inventory[10]) {
 
+    const craft* data = getCraftDataById(id);
+
+    int ingFound = 0;
+
+    for (int i = 0; i < data->ingNumber; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            if(data->ingredient[i].id == inventory[j].id) {
+                if(inventory[j].qty >= data->ingredient[i].qty) {
+                    ingFound++;
+                    if(ingFound == data->ingNumber) return 1;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+// 1 - Epée en bois | 3 bois - 1 roche | craftable : oui
+    
+void printCraftData(const craft* data, item inventory[10]) {
+
+    if(data == NULL) return;
+
+    const  itemData* targetItem = getItemData(data->targetItemId);
+
+    printf("%s | ", targetItem->name);
+
+    for (int i = 0; i < data->ingNumber; ++i) {
+
+        const itemData* ingData = getItemData(data->ingredient[i].id);
+
+        printf("%d %s ", data->ingredient[i].qty, ingData->name );
+
+        if(i < data->ingNumber - 1) printf("- ");
+    }
+
+    printf("| craftable : %s \n", isCraftable(data->id, inventory) ? "oui" : "non");
+}
+
+int isInZone(const int avaliableZones[3], int zone) {
+    for (int i = 0; i < 3; ++i) {
+        if(avaliableZones[i] == zone)
+            return 1;
+    }
+
+    return 0;
+}
+
+void printCrafts(item inventory[10], int zone) {
+
+    for (int id = 1; id <= 25; ++id) {
+        const craft* data = getCraftDataById(id);
+
+        if(isInZone(data->avaliableZones, zone) || zone == -1) {
+            printf("%d - ", id);
+            printCraftData(data, inventory);
+        }
+    }
+}
+
+void craftItem(int id, item* inventory) {
+
+    const craft* data = getCraftDataById(id);
+
+    if(isCraftable(data->id, inventory)) {
+
+        if(!addItem(data->targetItemId, inventory)) {
+            for (int i = 0; i < data->ingNumber; ++i) {
+                for (int j = 0; j < data->ingredient[i].qty; ++j) {
+                    deleteItem(data->ingredient[i].id, inventory);
+                }
+            }
+        }
+    }
 }
