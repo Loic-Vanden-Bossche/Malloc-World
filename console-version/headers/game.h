@@ -11,6 +11,7 @@
 #include "storage.h"
 #include "pathfind.h"
 #include "display.h"
+#include "craft.h"
 
 void display(map* worldMap, player* player, storageNode* storage);
 int mainMenu();
