@@ -14,27 +14,36 @@ const itemData itemList[34] = {
         },
 
         { 2, "Pioche en bois", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = ROCK
         },
 
         { 3, "Serpe en bois", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = PLANT
         },
 
         { 4, "Hache en bois", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = TREE
         },
 
         { 5, "Sapin", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 5,
+                .ressourceType = TREE
         },
 
         { 6, "Pierre", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 4,
+                .ressourceType = ROCK
         },
 
         { 7, "Herbe", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 3,
+                .ressourceType = PLANT
         },
 
         { 8, "Epee en pierre", WEAPON,
@@ -57,15 +66,18 @@ const itemData itemList[34] = {
         },
 
         { 12, "Pioche en pierre", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = ROCK
         },
 
         { 13, "Serpe en pierre", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = PLANT
         },
 
         { 14, "Hache en pierre", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = TREE
         },
 
         { 15, "Potion de vie I", HEAL,
@@ -73,15 +85,21 @@ const itemData itemList[34] = {
         },
 
         { 16, "Hetre", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 8,
+                .ressourceType = TREE
         },
 
         { 17, "Fer", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 7,
+                .ressourceType = ROCK
         },
 
         { 18, "Lavande", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 6,
+                .ressourceType = PLANT
         },
 
         { 19, "Epee en fer", WEAPON,
@@ -104,15 +122,18 @@ const itemData itemList[34] = {
         },
 
         { 23, "Pioche en fer", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = ROCK
         },
 
         { 24, "Serpe en fer", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = PLANT
         },
 
         { 25, "Hache en fer", TOOL,
-                .maxDurability = 10
+                .maxDurability = 10,
+                .ressourceType = TREE
         },
 
         { 26, "Potion de vie II", HEAL,
@@ -120,15 +141,21 @@ const itemData itemList[34] = {
         },
 
         { 27, "Chene", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 11,
+                .ressourceType = TREE
         },
 
         { 28, "Diamant", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 10,
+                .ressourceType = ROCK
         },
 
         { 29, "Chanvre", CRAFTING,
-                .maxQty = 20
+                .maxQty = 20,
+                .mapElemId = 9,
+                .ressourceType = PLANT
         },
 
         { 30, "Epee en diamant", WEAPON,
@@ -158,6 +185,15 @@ const itemData itemList[34] = {
 const itemData* getItemData(int id) {
     for (int i = 0; i < itemsCount; ++i) {
         if(itemList[i].id == id) return &itemList[i];
+    }
+
+    return NULL;
+}
+
+const itemData* getItemDataByRessourceId(int ressourceId) {
+
+    for (int i = 0; i < itemsCount; ++i) {
+        if(itemList[i].type == CRAFTING && itemList[i].mapElemId == ressourceId) return &itemList[i];
     }
 
     return NULL;

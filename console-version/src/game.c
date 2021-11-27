@@ -64,7 +64,17 @@ void clean_stdin(void)
 
 int collectRessource(int ressourceId, int playerInventory[10], coordinate targetCoordinates, int** mapGrid) {
 
-    debug("This element is a ressource !!");
+    debug("This element is a ressource !!\n");
+
+    const itemData* data = getItemDataByRessourceId(ressourceId);
+
+    if(data != NULL) {
+        debug("%d, %s, %d",data->id ,data->name, data->maxQty);
+    }
+}
+
+int fightMonster(int monsterId, int playerInventory[10], coordinate targetCoordinates, int** mapGrid ) {
+    debug("This element is a monster !!\n");
 }
 
 void processContextAction(int contextAction,coordinate targetCoordinates,map* worldMap,player* player) {
@@ -75,7 +85,7 @@ void processContextAction(int contextAction,coordinate targetCoordinates,map* wo
 
     if(elem != NULL) {
 
-        debug("%s ,%d\n", elem->name, elem->value);
+        debug("%d\n", elem->value);
 
         switch (elem->type) {
             case WALL:
@@ -86,6 +96,9 @@ void processContextAction(int contextAction,coordinate targetCoordinates,map* wo
                 break;
             case RESSOURCE:
                 collectRessource(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
+                break;
+            case MONSTER:
+                fightMonster(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
                 break;
             default:
                 debug("Action : %d\n", contextAction);

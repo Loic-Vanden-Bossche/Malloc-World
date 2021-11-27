@@ -25,9 +25,8 @@ typedef struct Coordinate {
 typedef struct MapElement {
 
   int value;
-  char *name;
   int avaliableZones[3];
-    enum MapElementType type;
+  enum MapElementType type;
 
 } mapElement;
 
