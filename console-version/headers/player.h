@@ -30,4 +30,5 @@ void applyXp(player *player, int xp);
 
 void displayPlayerInfos(player* player);
 
+void displayPlayerInventory(item* inventory);
 #endif //MALLOC_WORLD_PLAYER_H

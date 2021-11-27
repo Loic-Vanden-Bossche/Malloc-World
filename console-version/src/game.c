@@ -62,24 +62,48 @@ void clean_stdin(void)
     } while (c != '\n' && c != EOF);
 }
 
-int collectRessource(int ressourceId, int playerInventory[10], coordinate targetCoordinates, int** mapGrid) {
+item* getToolForRessource(enum RessourceType type, item playerInventory[10]) {
 
-    debug("This element is a ressource !!\n");
+    for (int i = 0; i < 10; ++i) {
+        const itemData* data = getItemData(playerInventory[i].id);
+
+        if(data != NULL) {
+            if(data->ressourceType == type && data->type == TOOL) {
+                return &playerInventory[i];
+            }
+        }
+    }
+
+    return NULL;
+}
+
+int collectRessource(int ressourceId, item playerInventory[10], coordinate targetCoordinates, int** mapGrid) {
 
     const itemData* data = getItemDataByRessourceId(ressourceId);
 
     if(data != NULL) {
-        debug("%d, %s, %d",data->id ,data->name, data->maxQty);
+        debug("This ressource is : %s !!\n", data->name);
+        item* tool = getToolForRessource(data->ressourceType, playerInventory);
+
+        if(tool != NULL) {
+            if(tool->durabitity > 0) {
+                debug("You picked up this\n");
+                mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
+                tool->durabitity--;
+            } else {
+                debug("Your tool is broken !!\n");
+            }
+        }
     }
+
+    displayPlayerInventory(playerInventory);
 }
 
-int fightMonster(int monsterId, int playerInventory[10], coordinate targetCoordinates, int** mapGrid ) {
+int fightMonster(int monsterId, item playerInventory[10], coordinate targetCoordinates, int** mapGrid ) {
     debug("This element is a monster !!\n");
 }
 
-void processContextAction(int contextAction,coordinate targetCoordinates,map* worldMap,player* player) {
-
-    displayMap(worldMap);
+void processContextAction(int contextAction, coordinate targetCoordinates,map* worldMap,player* player) {
 
     const mapElement* elem = getMapElementById(contextAction);
 
@@ -105,6 +129,8 @@ void processContextAction(int contextAction,coordinate targetCoordinates,map* wo
                 break;
         }
     }
+
+    displayMap(worldMap);
 }
 
 int game(map* worldMap, player* player, storageNode* storage) {
