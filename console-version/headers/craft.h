@@ -23,4 +23,6 @@ craft* getCraftData(int Zone);
 
 void printCraftDataById(int id) ;
 
+void isCratable(int id) ;
+
 #endif //MALLOC_WORLD_CRAFT_H

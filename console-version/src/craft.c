@@ -90,17 +90,18 @@ const craft getCraftDataByid(int id) {
     
 void printCraftDataById(int id) {
 
+   
+    const  itemData* dataItem = getItemData(id);
     const craft data = getCraftDataByid(id);
-
-    printf("\tId de l'craft : %d\n", data.id);
-    printf("\ttargetItemId : %d\n", data.targetItemId);
-    printf("\tingredient : %d\n", data.ingredient->id);
-    printf("\tingredient : %d\n", data.ingredient->qty);
-    printf("\tingNumber : %d\n", data.ingNumber);
-    for ( int i=0;i<3;i++){
-        printf("\tavaliableZones : %d\n", data.avaliableZones[i]);
-
-    }     
+    printf("\tname : %d\n", id," | ");
+    printf("\tname : %s\n", dataItem->name)," | ";
+    for(int i=0;i<3;i++){
+        int ing= data.ingredient[i].id;
+        const  itemData* ingData = getItemData(ing);
+        printf("\tingredient : %d\n", data.ingredient[i].qty," - ");
+        printf("\tname : %s\n",ingData->name," | " ); 
+    }
+        
 }
 
 
