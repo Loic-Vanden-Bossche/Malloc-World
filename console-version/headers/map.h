@@ -41,7 +41,7 @@ map* createMap(int startLvl);
 
 void destroyMap(map* worldMap);
 
-int setCurrentCoordinate(map* worldMap, int x, int y);
+int setCurrentCoordinate(map* worldMap, coordinate targetCoordinates);
 
 #include "map-generator.h"
 

@@ -83,7 +83,7 @@ void generateMap(map* worldMap){
         populateMap(worldMap->lvl[lvl], lvl, fillProb);
         debug("`\n");
 
-        setCurrentCoordinate(worldMap, 1, 1);
+        setCurrentCoordinate(worldMap, (coordinate){ 1, 1 });
     }
 }
 

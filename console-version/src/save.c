@@ -71,7 +71,7 @@ void parseMapData(FILE * f, map* worldMap){
             while (strToken != NULL) {
 
                 if(atoi(strToken) == 1) {
-                    setCurrentCoordinate(worldMap, tokCount, i);
+                    setCurrentCoordinate(worldMap, (coordinate){ tokCount, i });
                 } else {
                     worldMap->lvl[lvl][i][tokCount] = atoi(strToken);
                 }

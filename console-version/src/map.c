@@ -159,11 +159,13 @@ void destroyMap(map *worldMap) {
     free(worldMap);
 }
 
-int setCurrentCoordinate(map* worldMap, int x, int y) {
+int setCurrentCoordinate(map* worldMap, coordinate targetCoordinates) {
 
-    if(x >= MAP_SIZE_X - 1 || y >= MAP_SIZE_Y - 1) return -1;
+    if((targetCoordinates.x >= MAP_SIZE_X - 1 || targetCoordinates.y >= MAP_SIZE_Y - 1) ||
+    (targetCoordinates.x < 0 || targetCoordinates.y < 0))
+        return -10;
 
-    const int targetMapElem = worldMap->lvl[worldMap->currentLvl][y][x];
+    const int targetMapElem = worldMap->lvl[worldMap->currentLvl][targetCoordinates.y][targetCoordinates.x];
 
     if(targetMapElem == 0){
 
@@ -171,12 +173,12 @@ int setCurrentCoordinate(map* worldMap, int x, int y) {
             worldMap->lvl[worldMap->currentLvl][worldMap->currentCoords.y][worldMap->currentCoords.x] = 0;
         }
 
-        worldMap->currentCoords.x = x;
-        worldMap->currentCoords.y = y;
+        worldMap->currentCoords.x = targetCoordinates.x;
+        worldMap->currentCoords.y = targetCoordinates.y;
 
         debug("Player is at (%d, %d)\n", worldMap->currentCoords.x, worldMap->currentCoords.y);
 
-        worldMap->lvl[worldMap->currentLvl][y][x] = 1;
+        worldMap->lvl[worldMap->currentLvl][targetCoordinates.y][targetCoordinates.x] = 1;
     }
 
     return targetMapElem;

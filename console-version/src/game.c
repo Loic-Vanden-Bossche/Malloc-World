@@ -62,48 +62,57 @@ void clean_stdin(void)
     } while (c != '\n' && c != EOF);
 }
 
+void processContextAction(int contextAction,coordinate targetCoordinates,map* worldMap,player* player) {
+
+    displayMap(worldMap);
+
+    switch (contextAction) {
+        case -1:
+            debug("Destination is blocked or invalid\n");
+            break;
+        case 0:
+            debug("Player moved successfully\n");
+            break;
+        default:
+            debug("Action : %d\n", contextAction);
+            break;
+    }
+}
+
 int game(map* worldMap, player* player, storageNode* storage) {
 
     char ch = 0;
 
-    int contextAction;
+    coordinate targetCoords;
 
     do
     {
-        contextAction = -10;
+        targetCoords = worldMap->currentCoords;
 
         switch (ch) {
             case 's':
                 debug("Moving DOWN\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y+1);
+                targetCoords.y += 1;
                 break;
             case 'z':
                 debug("Moving UP\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y-1);
+                targetCoords.y -= 1;
                 break;
             case 'd':
                 debug("Moving RIGHT\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x+1, worldMap->currentCoords.y);
+                targetCoords.x += 1;
                 break;
             case 'q':
                 debug("Moving LEFT\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x-1, worldMap->currentCoords.y);
-                break;
-        }
-
-        displayMap(worldMap);
-
-        switch (contextAction) {
-            case -1:
-                debug("Destination is blocked or invalid\n");
-                break;
-            case 0:
-                debug("Player moved successfully\n");
+                targetCoords.x -= 1;
                 break;
             default:
-                debug("Action : %d\n", contextAction);
+                targetCoords.x = -1;
+                targetCoords.y = -1;
                 break;
         }
+
+        processContextAction(setCurrentCoordinate(worldMap, targetCoords), targetCoords, worldMap, player);
 
         clean_stdin();
         scanf(" %c", &ch);
