@@ -6,21 +6,11 @@
 
 // Cellular Automata
 
-typedef struct {
-    int r1_cutoff, r2_cutoff;
-    int reps;
-} generation_params;
-
-int fillprob = 12;
-int r1_cutoff = 5, r2_cutoff = 2;
-generation_params *params;
-
-generation_params *params_set;
-int generations;
+#define FILL_PROB 12
 
 int randPick(void)
 {
-    if(rand()%100 < fillprob)
+    if(rand()%100 < FILL_PROB)
         return TILE_WALL;
     else
         return TILE_FLOOR;
@@ -51,7 +41,7 @@ void generateMap(map* worldMap){
 
     pathFindResult res;
 
-    float fillProb = 0.0;
+    float fillProb;
 
     for (int lvl = 0; lvl < 3; ++lvl) {
 
@@ -93,11 +83,11 @@ void generateMap(map* worldMap){
         populateMap(worldMap->lvl[lvl], lvl, fillProb);
         debug("`\n");
 
-        setCurrentCoordinate(worldMap, 1, 1);
+        setCurrentCoordinate(worldMap, (coordinate){ 1, 1 });
     }
 }
 
-void generation(int** grid, int** grid2)
+void generation(int** grid, int** grid2, generation_params* params)
 {
     int xi, yi, ii, jj;
 
@@ -137,9 +127,9 @@ int cellularAutomata(int** grid)
 {
     int ii, jj;
 
-    generations = 1;
+    int generations = 1;
 
-    params = params_set = (generation_params*)malloc( sizeof(generation_params) * generations );
+    generation_params* params = (generation_params*)malloc( sizeof(generation_params) * generations );
 
     params->r1_cutoff  = 20;
     params->r2_cutoff  = 1;
@@ -160,9 +150,8 @@ int cellularAutomata(int** grid)
 
     for(ii=0; ii<generations; ii++)
     {
-        params = &params_set[ii];
         for(jj=0; jj<params->reps; jj++)
-            generation(grid, grid2);
+            generation(grid, grid2, params);
     }
 
     for(yi=0; yi<MAP_SIZE_Y; yi++)
@@ -176,6 +165,7 @@ int cellularAutomata(int** grid)
     }
 
     free(grid2);
+    free(params);
 
     return 0;
 }
@@ -201,17 +191,17 @@ void printCoordinate(coordinate coords){
 
 #define TOTAL_ELEMENTS_RT 0.2
 
-typedef enum MapElementType {
-    MINERAL,
-    WOOD,
-    PLANT,
-    MONSTER
+typedef enum MapElementRessourceType {
+    R_MINERAL,
+    R_WOOD,
+    R_PLANT,
+    R_MONSTER
 } mapElementType;
 
 mapElementType getRandomMapElementType() {
 
     float weights[4] = { 0.45, 0.25, 0.2, 0.1 };
-    int results[4] = { PLANT, MONSTER, WOOD, MINERAL };
+    int results[4] = { R_PLANT, R_MONSTER, R_WOOD, R_MINERAL };
 
     float x = (float)rand()/(float)(RAND_MAX/1);
 
@@ -248,13 +238,13 @@ int getElementFromType(mapElementType type, int lvl){
     int startId = 3 + (lvl*3);
 
     switch (type) {
-        case PLANT:
+        case R_PLANT:
             return startId;
-        case MINERAL:
+        case R_MINERAL:
             return startId+1;
-        case WOOD:
+        case R_WOOD:
             return startId+2;
-        case MONSTER:
+        case R_MONSTER:
             return getRandomMonster(lvl);
     }
 }
@@ -292,16 +282,16 @@ void populateMap(int** grid, int lvl, float fillProb) {
         } while(isBlocked || pRes.solved != P_FOUND);
 
         switch (type) {
-            case PLANT:
+            case R_PLANT:
                 totalElementTypes[0]++;
                 break;
-            case WOOD:
+            case R_WOOD:
                 totalElementTypes[1]++;
                 break;
-            case MINERAL:
+            case R_MINERAL:
                 totalElementTypes[2]++;
                 break;
-            case MONSTER:
+            case R_MONSTER:
                 totalElementTypes[3]++;
                 break;
         }

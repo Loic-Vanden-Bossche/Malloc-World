@@ -7,6 +7,24 @@
 int const MAX_ITEM_STACK = 20;
 int const MAX_PLAYER_HP = 100;
 
+int addItem(int itemId, item playerInventory[10]) {
+
+    const itemData* data = getItemData(itemId);
+
+    if(data == NULL) return -1;
+
+    for (int i = 0; i < 10; ++i) {
+        if(playerInventory[i].id == 0) {
+            playerInventory[i].id = data->id;
+            playerInventory[i].durabitity = data->maxDurability;
+            playerInventory[i].qty = 1;
+            return 0;
+        }
+    }
+
+    return -2;
+}
+
 player* createPlayer() {
 
     player *newPlayer = malloc(sizeof(player));
@@ -22,6 +40,9 @@ player* createPlayer() {
         newPlayer->inventory[i].durabitity = 0;
     }
 
+    for (int itemId = 1; itemId <= 3; ++itemId)
+        addItem(itemId, newPlayer->inventory);
+
     return newPlayer;
 }
 
@@ -30,15 +51,15 @@ void destroyPlayer(player* player) {
     free(player);
 }
 
-void displayPlayerInventory(player* player){
+void displayPlayerInventory(item* inventory) {
 
     printf("Player inventory : \n");
 
     for (int i = 0; i < 10; ++i) {
         printf("id : %d, qty : %d, d : %d\n",
-               player->inventory[i].id,
-               player->inventory[i].qty,
-               player->inventory[i].durabitity
+               inventory[i].id,
+               inventory[i].qty,
+               inventory[i].durabitity
                );
     }
 }
@@ -49,7 +70,7 @@ void displayPlayerInfos(player* player){
     printf("XP: %d\n", player->xp);
     printf("LVL: %d\n", player->lvl);
 
-    displayPlayerInventory(player);
+    displayPlayerInventory(player->inventory);
 }
 
 void applyHp(player *player, int hp){

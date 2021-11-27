@@ -62,48 +62,111 @@ void clean_stdin(void)
     } while (c != '\n' && c != EOF);
 }
 
-int game(map* worldMap, player* player, storageNode* storage) {
+item* getToolForRessource(enum RessourceType type, item playerInventory[10]) {
 
-    char ch = 0;
+    for (int i = 0; i < 10; ++i) {
+        const itemData* data = getItemData(playerInventory[i].id);
 
-    int contextAction;
-
-    do
-    {
-        contextAction = -10;
-
-        switch (ch) {
-            case 's':
-                debug("Moving DOWN\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y+1);
-                break;
-            case 'z':
-                debug("Moving UP\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x, worldMap->currentCoords.y-1);
-                break;
-            case 'd':
-                debug("Moving RIGHT\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x+1, worldMap->currentCoords.y);
-                break;
-            case 'q':
-                debug("Moving LEFT\n");
-                contextAction = setCurrentCoordinate(worldMap, worldMap->currentCoords.x-1, worldMap->currentCoords.y);
-                break;
+        if(data != NULL) {
+            if(data->ressourceType == type && data->type == TOOL) {
+                return &playerInventory[i];
+            }
         }
+    }
 
-        displayMap(worldMap);
+    return NULL;
+}
 
-        switch (contextAction) {
-            case -1:
-                debug("Destination is blocked or invalid\n");
+int collectRessource(int ressourceId, item playerInventory[10], coordinate targetCoordinates, int** mapGrid) {
+
+    const itemData* data = getItemDataByRessourceId(ressourceId);
+
+    if(data != NULL) {
+        debug("This ressource is : %s !!\n", data->name);
+        item* tool = getToolForRessource(data->ressourceType, playerInventory);
+
+        if(tool != NULL) {
+            if(tool->durabitity > 0) {
+                debug("You picked up this\n");
+                mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
+                tool->durabitity--;
+            } else {
+                debug("Your tool is broken !!\n");
+            }
+        }
+    }
+
+    displayPlayerInventory(playerInventory);
+}
+
+int fightMonster(int monsterId, item playerInventory[10], coordinate targetCoordinates, int** mapGrid ) {
+    debug("This element is a monster !!\n");
+}
+
+void processContextAction(int contextAction, coordinate targetCoordinates,map* worldMap,player* player) {
+
+    const mapElement* elem = getMapElementById(contextAction);
+
+    if(elem != NULL) {
+
+        debug("%d\n", elem->value);
+
+        switch (elem->type) {
+            case WALL:
+                debug("Destination is blocked\n");
                 break;
-            case 0:
+            case FLOOR:
                 debug("Player moved successfully\n");
+                break;
+            case RESSOURCE:
+                collectRessource(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
+                break;
+            case MONSTER:
+                fightMonster(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
                 break;
             default:
                 debug("Action : %d\n", contextAction);
                 break;
         }
+    }
+
+    displayMap(worldMap);
+}
+
+int game(map* worldMap, player* player, storageNode* storage) {
+
+    char ch = 0;
+
+    coordinate targetCoords;
+
+    do
+    {
+        targetCoords = worldMap->currentCoords;
+
+        switch (ch) {
+            case 's':
+                debug("Moving DOWN\n");
+                targetCoords.y += 1;
+                break;
+            case 'z':
+                debug("Moving UP\n");
+                targetCoords.y -= 1;
+                break;
+            case 'd':
+                debug("Moving RIGHT\n");
+                targetCoords.x += 1;
+                break;
+            case 'q':
+                debug("Moving LEFT\n");
+                targetCoords.x -= 1;
+                break;
+            default:
+                targetCoords.x = -1;
+                targetCoords.y = -1;
+                break;
+        }
+
+        processContextAction(setCurrentCoordinate(worldMap, targetCoords), targetCoords, worldMap, player);
 
         clean_stdin();
         scanf(" %c", &ch);

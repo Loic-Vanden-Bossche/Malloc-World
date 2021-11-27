@@ -69,7 +69,12 @@ void parseMapData(FILE * f, map* worldMap){
             int tokCount = 0;
 
             while (strToken != NULL) {
-                worldMap->lvl[lvl][i][tokCount] = atoi(strToken);
+
+                if(atoi(strToken) == 1) {
+                    setCurrentCoordinate(worldMap, (coordinate){ tokCount, i });
+                } else {
+                    worldMap->lvl[lvl][i][tokCount] = atoi(strToken);
+                }
 
                 tokCount++;
 
@@ -80,7 +85,7 @@ void parseMapData(FILE * f, map* worldMap){
         }
     }
 
-    //free(buffer);
+    free(buffer);
 }
 
 // ==== Player save functions ==== //
@@ -201,7 +206,7 @@ int parseSaveFile(map* worldMap, player* player, storageNode** storage){
     f = fopen(SAVE_FILE_LOCATION,"r");
 
     parseMapData(f, worldMap);
-    debug("Player data parsed\n");
+    debug("Map data parsed\n");
 
     if(parsePlayerData(f, player)) {
         debug("Player data successfully parsed\n");

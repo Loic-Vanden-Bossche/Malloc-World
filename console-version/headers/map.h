@@ -15,6 +15,8 @@
 #define TILE_FLOOR 0
 #define TILE_WALL -1
 
+enum MapElementType { FLOOR, WALL, RESSOURCE, MONSTER, BOSS, NPC, PLAYER, PORTAL };
+
 typedef struct Coordinate {
     int x;
     int y;
@@ -23,8 +25,8 @@ typedef struct Coordinate {
 typedef struct MapElement {
 
   int value;
-  char *name;
   int avaliableZones[3];
+  enum MapElementType type;
 
 } mapElement;
 
@@ -41,7 +43,9 @@ map* createMap(int startLvl);
 
 void destroyMap(map* worldMap);
 
-int setCurrentCoordinate(map* worldMap, int x, int y);
+int setCurrentCoordinate(map* worldMap, coordinate targetCoordinates);
+
+const mapElement* getMapElementById(int id);
 
 #include "map-generator.h"
 

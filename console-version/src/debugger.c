@@ -17,6 +17,10 @@ void debug(const char *fmt, ...)
     }
 }
 
+void clrscr() {
+    if(!isDebug) clearScreen();
+}
+
 void setDebug() {
 
     isDebug = 1;
