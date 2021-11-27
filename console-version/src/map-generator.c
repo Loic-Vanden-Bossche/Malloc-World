@@ -6,20 +6,11 @@
 
 // Cellular Automata
 
-typedef struct {
-    int r1_cutoff, r2_cutoff;
-    int reps;
-} generation_params;
-
-int fillprob = 12;
-int r1_cutoff = 5, r2_cutoff = 2;
-generation_params *params;
-
-int generations;
+#define FILL_PROB 12
 
 int randPick(void)
 {
-    if(rand()%100 < fillprob)
+    if(rand()%100 < FILL_PROB)
         return TILE_WALL;
     else
         return TILE_FLOOR;
@@ -50,7 +41,7 @@ void generateMap(map* worldMap){
 
     pathFindResult res;
 
-    float fillProb = 0.0;
+    float fillProb;
 
     for (int lvl = 0; lvl < 3; ++lvl) {
 
@@ -96,7 +87,7 @@ void generateMap(map* worldMap){
     }
 }
 
-void generation(int** grid, int** grid2)
+void generation(int** grid, int** grid2, generation_params* params)
 {
     int xi, yi, ii, jj;
 
@@ -136,9 +127,9 @@ int cellularAutomata(int** grid)
 {
     int ii, jj;
 
-    generations = 1;
+    int generations = 1;
 
-    params = (generation_params*)malloc( sizeof(generation_params) * generations );
+    generation_params* params = (generation_params*)malloc( sizeof(generation_params) * generations );
 
     params->r1_cutoff  = 20;
     params->r2_cutoff  = 1;
@@ -160,7 +151,7 @@ int cellularAutomata(int** grid)
     for(ii=0; ii<generations; ii++)
     {
         for(jj=0; jj<params->reps; jj++)
-            generation(grid, grid2);
+            generation(grid, grid2, params);
     }
 
     for(yi=0; yi<MAP_SIZE_Y; yi++)

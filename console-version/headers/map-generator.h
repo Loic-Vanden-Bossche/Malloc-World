@@ -11,6 +11,11 @@
 #include "debugger.h"
 #include "pathfind.h"
 
+typedef struct {
+    int r1_cutoff, r2_cutoff;
+    int reps;
+} generation_params;
+
 int cellularAutomata(int** grid);
 void populateMap(int** grid, int lvl, float fillProb);
 void generateMap(map* worldMap);
