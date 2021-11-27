@@ -29,19 +29,16 @@ const itemData itemList[34] = {
         },
 
         { 5, "Sapin", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 5,
                 .ressourceType = TREE
         },
 
         { 6, "Pierre", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 4,
                 .ressourceType = ROCK
         },
 
         { 7, "Herbe", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 3,
                 .ressourceType = PLANT
         },
@@ -85,19 +82,16 @@ const itemData itemList[34] = {
         },
 
         { 16, "Hetre", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 8,
                 .ressourceType = TREE
         },
 
         { 17, "Fer", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 7,
                 .ressourceType = ROCK
         },
 
         { 18, "Lavande", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 6,
                 .ressourceType = PLANT
         },
@@ -141,19 +135,16 @@ const itemData itemList[34] = {
         },
 
         { 27, "Chene", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 11,
                 .ressourceType = TREE
         },
 
         { 28, "Diamant", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 10,
                 .ressourceType = ROCK
         },
 
         { 29, "Chanvre", CRAFTING,
-                .maxQty = 20,
                 .mapElemId = 9,
                 .ressourceType = PLANT
         },
@@ -217,7 +208,7 @@ void printItemData(int id) {
             break;
 
         case CRAFTING:
-            printf("\tQuantite max : %d\n", data->maxQty);
+            printf("\tQuantite max : 20\n");
             break;
 
         case ARMOR:

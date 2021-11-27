@@ -1,10 +1,11 @@
 #ifndef MALLOC_WORLD_CRAFT_H
 #define MALLOC_WORLD_CRAFT_H
 #include "item.h"
+#include "player.h"
 
 typedef struct Ingredient {
-    int id;
     int qty;
+    int id;
 } ingredient;
 
 typedef struct Craft {
@@ -17,12 +18,13 @@ typedef struct Craft {
 
 void showCraftLvl (int zone);
 
-item* craftItem ( item* items,int idCraft);
+void craftItem(int craftId, item* inventory);
 
 craft* getCraftData(int Zone);
 
-void printCraftDataById(int id) ;
+void printCraftDataById(int id, item inventory[10]);
 
-void isCratable(int id) ;
+void isCratable(int id);
 
+void printCrafts(item inventory[10], int zone);
 #endif //MALLOC_WORLD_CRAFT_H

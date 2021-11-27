@@ -13,6 +13,18 @@ int addItem(int itemId, item playerInventory[10]) {
 
     if(data == NULL) return -1;
 
+    if(data->type == CRAFTING) {
+        for (int i = 0; i < 10; ++i) {
+            if(playerInventory[i].id == itemId) {
+
+                if(playerInventory[i].qty < MAX_ITEM_STACK) {
+                    playerInventory[i].qty++;
+                    return 0;
+                }
+            }
+        }
+    }
+
     for (int i = 0; i < 10; ++i) {
         if(playerInventory[i].id == 0) {
             playerInventory[i].id = data->id;
@@ -23,6 +35,39 @@ int addItem(int itemId, item playerInventory[10]) {
     }
 
     return -2;
+}
+
+int deleteItem(int itemId, item playerInventory[10]) {
+    const itemData* data = getItemData(itemId);
+
+    if(data == NULL) return -1;
+
+    item* itemRef = NULL;
+
+    for (int i = 0; i < 10; ++i) {
+        if(playerInventory[i].id == itemId) {
+            itemRef = &playerInventory[i];
+        }
+    }
+
+    if(itemRef != NULL) {
+        itemRef->qty--;
+
+        if(itemRef->qty == 0) {
+            for (int i = 0; i < 10; ++i) {
+                if(itemRef->id == itemId) {
+
+                    itemRef->id = 0;
+                    itemRef->qty = 0;
+                    itemRef->durabitity = 0;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    return -1;
 }
 
 player* createPlayer() {
@@ -40,7 +85,7 @@ player* createPlayer() {
         newPlayer->inventory[i].durabitity = 0;
     }
 
-    for (int itemId = 1; itemId <= 3; ++itemId)
+    for (int itemId = 1; itemId <= 4; ++itemId)
         addItem(itemId, newPlayer->inventory);
 
     return newPlayer;

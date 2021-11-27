@@ -17,7 +17,6 @@ typedef struct ItemData {
     enum ItemType type;
 
     // For resources
-    int maxQty;
     int mapElemId;
 
     // For ressource and tools
