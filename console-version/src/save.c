@@ -85,7 +85,7 @@ void parseMapData(FILE * f, map* worldMap){
         }
     }
 
-    //free(buffer);
+    free(buffer);
 }
 
 // ==== Player save functions ==== //
