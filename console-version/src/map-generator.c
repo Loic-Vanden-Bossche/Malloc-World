@@ -191,17 +191,17 @@ void printCoordinate(coordinate coords){
 
 #define TOTAL_ELEMENTS_RT 0.2
 
-typedef enum MapElementType {
-    MINERAL,
-    WOOD,
-    PLANT,
-    MONSTER
+typedef enum MapElementRessourceType {
+    R_MINERAL,
+    R_WOOD,
+    R_PLANT,
+    R_MONSTER
 } mapElementType;
 
 mapElementType getRandomMapElementType() {
 
     float weights[4] = { 0.45, 0.25, 0.2, 0.1 };
-    int results[4] = { PLANT, MONSTER, WOOD, MINERAL };
+    int results[4] = { R_PLANT, R_MONSTER, R_WOOD, R_MINERAL };
 
     float x = (float)rand()/(float)(RAND_MAX/1);
 
@@ -238,13 +238,13 @@ int getElementFromType(mapElementType type, int lvl){
     int startId = 3 + (lvl*3);
 
     switch (type) {
-        case PLANT:
+        case R_PLANT:
             return startId;
-        case MINERAL:
+        case R_MINERAL:
             return startId+1;
-        case WOOD:
+        case R_WOOD:
             return startId+2;
-        case MONSTER:
+        case R_MONSTER:
             return getRandomMonster(lvl);
     }
 }
@@ -282,16 +282,16 @@ void populateMap(int** grid, int lvl, float fillProb) {
         } while(isBlocked || pRes.solved != P_FOUND);
 
         switch (type) {
-            case PLANT:
+            case R_PLANT:
                 totalElementTypes[0]++;
                 break;
-            case WOOD:
+            case R_WOOD:
                 totalElementTypes[1]++;
                 break;
-            case MINERAL:
+            case R_MINERAL:
                 totalElementTypes[2]++;
                 break;
-            case MONSTER:
+            case R_MONSTER:
                 totalElementTypes[3]++;
                 break;
         }

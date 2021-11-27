@@ -62,20 +62,35 @@ void clean_stdin(void)
     } while (c != '\n' && c != EOF);
 }
 
+int collectRessource(int ressourceId, int playerInventory[10], coordinate targetCoordinates, int** mapGrid) {
+
+    debug("This element is a ressource !!");
+}
+
 void processContextAction(int contextAction,coordinate targetCoordinates,map* worldMap,player* player) {
 
     displayMap(worldMap);
 
-    switch (contextAction) {
-        case -1:
-            debug("Destination is blocked or invalid\n");
-            break;
-        case 0:
-            debug("Player moved successfully\n");
-            break;
-        default:
-            debug("Action : %d\n", contextAction);
-            break;
+    const mapElement* elem = getMapElementById(contextAction);
+
+    if(elem != NULL) {
+
+        debug("%s ,%d\n", elem->name, elem->value);
+
+        switch (elem->type) {
+            case WALL:
+                debug("Destination is blocked\n");
+                break;
+            case FLOOR:
+                debug("Player moved successfully\n");
+                break;
+            case RESSOURCE:
+                collectRessource(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
+                break;
+            default:
+                debug("Action : %d\n", contextAction);
+                break;
+        }
     }
 }
 
