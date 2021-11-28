@@ -139,7 +139,7 @@ void applyLvl(player *player, int lvl) {
     int maxHp = 100;
 
     for (int i = 0; i < lvl; ++i) {
-        maxHp = maxHp * 1.2;
+        maxHp *= 1.2;
     }
 
     player->maxHp = maxHp;

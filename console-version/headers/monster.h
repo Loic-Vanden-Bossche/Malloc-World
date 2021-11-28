@@ -10,9 +10,13 @@
 typedef struct Monster {
     int id;
     char* name;
-    int hp;
-    int damages;
+    int lvl;
     int maxHp;
+    int damages;
 } monster;
+
+void generateMonsters();
+
+void displayMonsters();
 
 #endif //MALLOC_WORLD_MONSTER_H

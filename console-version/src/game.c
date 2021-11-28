@@ -184,6 +184,8 @@ int newGame() {
     player* player = createPlayer();
     storageNode* storage = NULL;
 
+    generateMonsters();
+
     generateMap(worldMap);
 
     game(worldMap, player, storage);
@@ -204,6 +206,8 @@ int continueGame() {
     map *worldMap = createMap(0);
     player* player = createPlayer();
     storageNode* storage = NULL;
+
+    generateMonsters();
 
     if(!parseSaveFile(worldMap, player, &storage)){
         waitKey("Error occurred while getting saved data");

@@ -4,7 +4,7 @@
 
 #include "../headers/monster.h"
 
-const monster monsters[86] = {
+monster monsters[86] = {
         { 1, "Bane Bull" },
         { 2, "Black Fungus" },
         { 3, "Bloom Beast" },
@@ -93,7 +93,29 @@ const monster monsters[86] = {
         { 86, "Great Bull" },
 };
 
+void generateMonsters() {
 
+    for (int i = 0; i < 86; ++i) {
+        monsters[i].lvl = (i/8)+1;
+
+        monsters[i].maxHp = 100 * pow(1.2, monsters[i].lvl - 1);
+        monsters[i].damages = pow(1.3, monsters[i].lvl - 1);
+    }
+}
+
+void displayMonsters() {
+
+    for (int i = 0; i < 86; ++i) {
+        printf("%d | %d | %d | %d | %s\n",monsters[i].id, monsters[i].lvl, monsters[i].maxHp, monsters[i].damages, monsters[i].name);
+    }
+}
+
+monster* getMonsterById(int id) {
+    for (int i = 0; i < 86; ++i)
+        if (monsters[i].id == id) return &monsters[i];
+
+    return NULL;
+}
 
 const char* getRandomBossName() {
 

@@ -12,6 +12,7 @@
 #include "pathfind.h"
 #include "display.h"
 #include "craft.h"
+#include "monster.h"
 
 void display(map* worldMap, player* player, storageNode* storage);
 int mainMenu();
