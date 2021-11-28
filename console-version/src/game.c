@@ -19,9 +19,9 @@ int mainMenu() {
         fflush(stdin);
         ch = getchar();
 
-        if(ch == '1' || ch == '2' || ch == '3'){
-
-            return ch - '0';
+        switch(ch) {
+            case '1' ... '3':
+                return ch - '0';
         }
     }
 }
@@ -62,6 +62,11 @@ void clean_stdin(void)
     } while (c != '\n' && c != EOF);
 }
 
+int getInput() {
+    clean_stdin();
+    return getchar();
+}
+
 item* getToolForRessource(enum RessourceType type, item playerInventory[10]) {
 
     for (int i = 0; i < 10; ++i) {
@@ -99,9 +104,12 @@ int collectRessource(int ressourceId, item playerInventory[10], coordinate targe
     displayPlayerInventory(playerInventory);
 }
 
-int fightMonster(int monsterId, item playerInventory[10], coordinate targetCoordinates, int** mapGrid ) {
+int interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
     debug("This element is a monster !!\n");
+
+    fightMonster(monsterId - 12, player);
 }
+
 
 void processContextAction(int contextAction, coordinate targetCoordinates,map* worldMap,player* player) {
 
@@ -122,7 +130,7 @@ void processContextAction(int contextAction, coordinate targetCoordinates,map* w
                 collectRessource(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
                 break;
             case MONSTER:
-                fightMonster(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
+                interactMonster(elem->value, player, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
                 break;
             default:
                 debug("Action : %d\n", contextAction);
@@ -168,8 +176,7 @@ int game(map* worldMap, player* player, storageNode* storage) {
 
         processContextAction(setCurrentCoordinate(worldMap, targetCoords), targetCoords, worldMap, player);
 
-        clean_stdin();
-        scanf(" %c", &ch);
+        ch = getInput();
 
     } while (ch != 'a');
 
@@ -183,6 +190,8 @@ int newGame() {
     map *worldMap = createMap(0);
     player* player = createPlayer();
     storageNode* storage = NULL;
+
+    generateMonsters();
 
     generateMap(worldMap);
 
@@ -204,6 +213,8 @@ int continueGame() {
     map *worldMap = createMap(0);
     player* player = createPlayer();
     storageNode* storage = NULL;
+
+    generateMonsters();
 
     if(!parseSaveFile(worldMap, player, &storage)){
         waitKey("Error occurred while getting saved data");
