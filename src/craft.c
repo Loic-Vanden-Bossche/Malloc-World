@@ -97,7 +97,7 @@ void printCrafts(item inventory[10], int zone) {
     for (int id = 1; id <= 25; ++id) {
         const craft* data = getCraftDataById(id);
 
-        if(isInZone(data->avaliableZones, zone) || zone == -1) {
+        if(isInZone(data->availableZones, zone) || zone == -1) {
             printf("%d - ", id);
             printCraftData(data, inventory);
         }

@@ -259,3 +259,11 @@ void display(map* worldMap, player* player) {
     }
 }
 
+void displayWholeMap(map* worldMap) {
+    for (int i = 0; i < MAP_SIZE_Y; ++i) {
+        for (int j = 0; j < MAP_SIZE_X; ++j) {
+            displayGridCoords(worldMap->lvl[worldMap->currentLvl], (coordinate){j, i});
+        }
+        putchar('\n');
+    }
+}

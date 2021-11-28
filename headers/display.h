@@ -20,5 +20,6 @@ void display(map* worldMap, player* player);
 
 void addLog( const char * format, ... );
 void printLogs();
+void displayWholeMap(map* worldMap);
 
 #endif //MALLOC_WORLD_DISPLAY_H

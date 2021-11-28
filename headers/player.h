@@ -17,7 +17,6 @@ typedef struct Player {
     int xp;
     int lvl;
     item inventory[10];
-
 } player;
 
 player* createPlayer();

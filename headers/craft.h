@@ -13,7 +13,7 @@ typedef struct Craft {
     int targetItemId;
     ingredient ingredient[2];
     int ingNumber;
-    int avaliableZones[3];
+    int availableZones[3];
 } craft;
 
 void showCraftLvl (int zone);
