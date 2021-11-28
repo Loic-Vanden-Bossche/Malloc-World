@@ -98,7 +98,7 @@ void generateMonsters() {
     for (int i = 0; i < 86; ++i) {
         monsters[i].lvl = (i/8)+1;
 
-        monsters[i].maxHp = 100 * pow(1.2, monsters[i].lvl - 1);
+        monsters[i].maxHp = 10 * pow(1.2, monsters[i].lvl - 1);
         monsters[i].damages = pow(1.3, monsters[i].lvl - 1);
     }
 }
@@ -158,7 +158,7 @@ int fightMenu() {
 
     printf("1 - Frapper\n");
     printf("2 - Utiliser une potion\n");
-    printf("3 - Equiper une autre arme\n");
+    printf("3 - Fuir (30%% de chance)\n");
 
     char ch;
 
@@ -199,42 +199,79 @@ void applyDamages(int* hp, int damages) {
     *hp = ((*hp - damages) < 0) ? 0 : *hp - damages;
 }
 
-void fightMonster(int monsterId, player* player) {
+void applyPotion(player* player){
+
+    for (int i = 0; i < 10; ++i) {
+        const itemData* data = getItemData(player->inventory[i].id);
+
+        if(data != NULL) {
+            if(data->type == HEAL) {
+                printf("%s Utilise, %d points de vie resaures\n", data->name, applyHp(player, data->healValue));
+                return;
+            }
+        }
+    }
+
+    printf("Vous n'avez pas de potions\n");
+}
+
+const int coinFlip() {
+    return rand() & 1;
+}
+
+int fightMonster(int monsterId, player* player) {
+
+    clrscr();
+
+    int tried = 0;
 
     const monster* monsterData = getMonsterById(monsterId);
 
-    if(monsterData == NULL) return;
+    if(monsterData == NULL) return -10;
 
     int monsterHp = monsterData->maxHp;
 
     const itemData* equippedWeapon = getBestWeapon(player->inventory);
 
     if(equippedWeapon == NULL) {
-        debug("Vous n'avez aucune arme !!\n Vous ne pouvez pas combattre !!\n");
-        return;
+        return -1;
     }
 
-    debug("Vous combattez le monstre : %s de niveau %d\n", monsterData->name, monsterData->lvl);
-    debug("Votre arme est : %s\n", equippedWeapon->name);
+    printf("Vous combattez le monstre : %s de niveau %d\n", monsterData->name, monsterData->lvl);
+    printf("Votre arme est : %s\n", equippedWeapon->name);
 
     while(monsterHp > 0 && player->hp > 0) {
 
         switch(fightMenu()){
             case 1:
-                debug("Vous infligez %d de dégâts au monstre !!\n", equippedWeapon->damages);
+                printf("Vous infligez %d de dégâts au monstre !!\n", equippedWeapon->damages);
                 applyDamages(&monsterHp, equippedWeapon->damages);
                 break;
             case 2:
+                applyPotion(player);
                 break;
             case 3:
-                break;
+                if(tried == 0) {
+                    if(coinFlip()){
+                        return -2;
+                    } else {
+                        printf("Votre fuitez a echoue\n");
+                    }
+
+                    tried = 1;
+                } else {
+
+                    printf("Vous avez deja essaye de fuir\n");
+                }
         }
 
-        debug("Le monstre attaque !!\n");
+        printf("Le monstre attaque !!\n");
 
-        debug("Le monstre vous a infligé %d de dégâts !!\n", monsterData->damages);
+        printf("Le monstre vous a infligé %d de dégâts !!\n", monsterData->damages);
         applyDamages(&player->hp, monsterData->damages);
 
-        debug("PHP : %d | MHP : %d\n", player->hp, monsterHp);
+        printf("Vie du joueur : %d | Vie du monstre : %d\n", player->hp, monsterHp);
     }
+
+    return player->hp != 0;
 }

@@ -4,12 +4,49 @@
 
 #include "../headers/game.h"
 
+void clean_stdin(void)
+{
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
+}
+
+int getInput() {
+    clean_stdin();
+    return getchar();
+}
+
 int mainMenu() {
 
     clrscr();
 
     printf("1 - Continuer\n");
     printf("2 - Nouvelle partie\n");
+    printf("3 - Quitter\n");
+
+    char ch;
+
+    while(1) {
+
+        fflush(stdin);
+        ch = getchar();
+
+        switch(ch) {
+            case '1' ... '3':
+                return ch - '0';
+        }
+    }
+}
+
+int npcMenu() {
+
+    clrscr();
+
+    printf("=== menu PNJ ===\n");
+
+    printf("1 - Reparer materiel\n");
+    printf("2 - Liste des crafts\n");
     printf("3 - Quitter\n");
 
     char ch;
@@ -53,19 +90,7 @@ int displayConfirm(char* message) {
     }
 }
 
-#include <stdio.h>
-void clean_stdin(void)
-{
-    int c;
-    do {
-        c = getchar();
-    } while (c != '\n' && c != EOF);
-}
 
-int getInput() {
-    clean_stdin();
-    return getchar();
-}
 
 item* getToolForRessource(enum RessourceType type, item playerInventory[10]) {
 
@@ -113,10 +138,26 @@ int collectRessource(int ressourceId, item playerInventory[10], coordinate targe
     }
 }
 
-int interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
+void interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
     debug("This element is a monster !!\n");
 
-    fightMonster(monsterId - 12, player);
+    switch(fightMonster(monsterId - 12, player)){
+        case 0:
+            addLog("Vous etes mort");
+            break;
+        case 1:
+            addLog("Vous avez battu le monstre");
+            mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
+            addLog("Vous avez gagner %d xp", monsterId);
+            applyXp(player, monsterId);
+            break;
+        case -1:
+            addLog("Vous navez pas d'armes");
+            break;
+        case -2:
+            addLog("Vous fuyez");
+            break;
+    }
 }
 
 void interactPortal(map* worldMap, player* player, int portalValue) {
@@ -148,6 +189,23 @@ void interactPortal(map* worldMap, player* player, int portalValue) {
     }
 }
 
+void interactNPC(player* player, int currentLvl) {
+
+    int menuRes = npcMenu();
+
+    if(menuRes == 1) {
+        addLog("%d items repare", repairItems(player->inventory));
+    } else if (menuRes == 2) {
+        const craft* craftData = getCraftDataById(selectCraftMenu(player->inventory, currentLvl + 1));
+
+        if(craftData != NULL) {
+            const itemData* itemTarget = getItemData(craftData->targetItemId);
+
+            addLog("Vous avez crafter 1 %s", itemTarget->name);
+        }
+    }
+}
+
 void processContextAction(int contextAction, coordinate targetCoordinates,map* worldMap,player* player) {
 
     const mapElement* elem = getMapElementById(contextAction);
@@ -165,6 +223,10 @@ void processContextAction(int contextAction, coordinate targetCoordinates,map* w
                 break;
             case PORTAL:
                 interactPortal(worldMap, player, elem->value);
+                break;
+            case NPC:
+                interactNPC(player, worldMap->currentLvl);
+                break;
             default:
                 debug("Action : %d\n", contextAction);
                 break;

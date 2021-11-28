@@ -17,7 +17,6 @@ typedef struct Player {
     int xp;
     int lvl;
     item inventory[10];
-
 } player;
 
 player* createPlayer();
@@ -26,7 +25,7 @@ void destroyPlayer();
 
 void applyLvl(player *player, int lvl);
 
-void applyHp(player *player, int hp);
+int applyHp(player *player, int hp);
 
 void applyXp(player *player, int xp);
 
@@ -43,5 +42,7 @@ int calculateMaxHp(int lvl);
 float getLvlProgression(int xp, int currentLvl);
 
 int calculateXpForNextLvl(int lvl);
+
+int repairItems(item inventory[10]);
 
 #endif //MALLOC_WORLD_PLAYER_H

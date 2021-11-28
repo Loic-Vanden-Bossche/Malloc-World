@@ -4,10 +4,6 @@
 
 #include "../headers/save.h"
 
-const char* SAVE_FILE_LOCATION = "../saveFile.txt";
-
-const int BUFFER_LENGTH = 2000;
-
 // ==== Utils save functions ==== //
 
 int checkItem(item *toCheck){
