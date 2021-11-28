@@ -10,22 +10,6 @@ const int BUFFER_LENGTH = 2000;
 
 // ==== Utils save functions ==== //
 
-int calculateMaxHp(int lvl){
-
-    int maxHp = 100;
-
-    for (int i = 1; i <= 10; ++i) {
-
-        if(lvl == i) return maxHp;
-
-        if(i >= 6 && i < 8) maxHp += 50;
-        else if(i == 8 || i == 9) maxHp += 75;
-        else maxHp += (10*i);
-    }
-
-    return 0;
-}
-
 int checkItem(item *toCheck){
 
     const itemData* data = getItemData(toCheck->id);

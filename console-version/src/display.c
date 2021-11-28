@@ -7,9 +7,17 @@
 #define DISPLAY_SIZE_X 150
 #define DISPLAY_SIZE_Y 40
 
-#define DISPLAY_MAP_SIZE_X 50
-#define DISPLAY_MAP_SIZE_Y 20
+#define GRID1_X 100
+#define GRID1_Y 30
 
+#define GRID2_X 100
+#define GRID2_Y 10
+
+#define GRID3_X 50
+#define GRID3_Y 30
+
+#define GRID4_X 50
+#define GRID4_Y 10
 
 int isUnicode = 0;
 
@@ -17,22 +25,62 @@ void setUnicode() {
     isUnicode = 1;
 }
 
-void getMapDisplayOffsetParams(coordinate playerPos, int* sXParam, int* sYParam) {
+logNode *logs = NULL;
 
-    if(playerPos.x < DISPLAY_MAP_SIZE_X/2) {
-        *sXParam = 0;
-    } else if (playerPos.x > MAP_SIZE_X - (DISPLAY_MAP_SIZE_X/2)) {
-        *sXParam = MAP_SIZE_X - DISPLAY_MAP_SIZE_X - 1;
-    } else {
-        *sXParam = playerPos.x - (DISPLAY_MAP_SIZE_X/2);
+void getBlankLog(char log[50]) {
+
+    for (int i = 0; i < 50; ++i) {
+        log[i] = ' ';
+    }
+}
+
+void logPushFront(char message[50]) {
+
+    logNode* new_node = (logNode*) malloc(sizeof(logNode));
+
+    char fMessage[50] = {' '};
+
+    sprintf(fMessage, "- %s", message);
+
+    getBlankLog(new_node->log);
+
+    strcpy(new_node->log, fMessage);
+
+    new_node->next = (*&logs);
+
+    (*&logs) = new_node;
+}
+
+char* getLogAtIndex(int index) {
+
+    logNode* current = logs;
+
+    int i = 0;
+    while (current != NULL) {
+        if(i == index) return current->log;
+        i++;
+        current = current->next;
     }
 
-    if(playerPos.y < DISPLAY_MAP_SIZE_Y/2) {
-        *sYParam = 0;
-    } else if (playerPos.y > MAP_SIZE_Y - (DISPLAY_MAP_SIZE_Y/2)) {
-        *sYParam = MAP_SIZE_Y - DISPLAY_MAP_SIZE_Y - 1;
+    return NULL;
+}
+
+void getMapDisplayOffsetParams(coordinate playerPos, int* sXParam, int* sYParam) {
+
+    if(playerPos.x < GRID1_X/2) {
+        *sXParam = 0;
+    } else if (playerPos.x > MAP_SIZE_X - (GRID1_X/2)) {
+        *sXParam = MAP_SIZE_X - GRID1_X - 1;
     } else {
-        *sYParam = playerPos.y - (DISPLAY_MAP_SIZE_Y/2);
+        *sXParam = playerPos.x - (GRID1_X/2);
+    }
+
+    if(playerPos.y < GRID1_Y/2) {
+        *sYParam = 0;
+    } else if (playerPos.y > MAP_SIZE_Y - (GRID1_Y/2)) {
+        *sYParam = MAP_SIZE_Y - GRID1_Y - 1;
+    } else {
+        *sYParam = playerPos.y - (GRID1_Y/2);
     }
 }
 
@@ -68,16 +116,85 @@ void displayMap(map* worldMap, int dx, int dy) {
     displayGridCoords(worldMap->lvl[worldMap->currentLvl], (coordinate){ sXParam + dx, sYParam + dy });
 }
 
+void drawBars(char playerDisplay[GRID2_Y][GRID2_X], player* player,int x,int y) {
+
+    int barIndex = 1;
+
+    //Draw frames
+
+    if(((x < 49 && x >= 0) && (y == barIndex || y == (barIndex + 2))) || (y == (barIndex + 1) && (x == 0 || x == 48)) ) {
+        playerDisplay[y][x] = '#';
+    }
+
+    if(((x <= 99 && x >= 50) && (y == barIndex || y == (barIndex + 2))) || (y == (barIndex + 1) && (x == 50 || x == 99)) ) {
+        playerDisplay[y][x] = '#';
+    }
+
+    //Fill with values
+
+    float mult = (float)player->hp/player->maxHp;
+
+    if(y == (barIndex + 1) && (x < 48 && x >= 1) && ((x - 1) <= mult*(48 - 1))) {
+        playerDisplay[y][x] = ',';
+    }
+
+    mult = getLvlProgression(player->xp, player->lvl);
+
+    if(y == (barIndex + 1) && (x < 99 && x >= 51) && ((x - 51) <= mult*(99 - 51))) {
+        playerDisplay[y][x] = ',';
+    }
+}
+
+void displayPlayer(player* player, int dx, int dy) {
+
+    char playerDisplay[GRID2_Y][GRID2_X];
+
+    for (int i = 0; i < GRID2_Y; ++i) {
+        for (int j = 0; j < GRID2_X; ++j) {
+            playerDisplay[i][j] = ' ';
+
+            drawBars(playerDisplay, player, j, i);
+        }
+    }
+
+    putchar(playerDisplay[dy - GRID1_Y][dx]);
+}
+
+void displayLogs(int dx, int dy) {
+
+    char toPrint = 0;
+
+    for (int i = 0; i < 4; ++i) {
+        if(dy == DISPLAY_SIZE_Y - 2*(i+1)) {
+            if(getLogAtIndex(i) != NULL) {
+                toPrint = getLogAtIndex(i)[dx - GRID1_X - 2];
+                if (toPrint != '\n' && toPrint != '\0') {
+                    putchar(toPrint);
+                    return;
+                }
+            }
+        }
+    }
+
+    putchar(' ');
+}
+
 void display(map* worldMap, player* player) {
 
     for (int dy = 0; dy < DISPLAY_SIZE_Y; ++dy) {
         for (int dx = 0; dx < DISPLAY_SIZE_X; ++dx) {
-            if(dy < DISPLAY_MAP_SIZE_Y && dx < DISPLAY_MAP_SIZE_X) {
+            if(dy <= GRID1_Y && dx <= GRID1_X && dy != 0 && dx != 0) {
 
-                displayMap(worldMap, dx, dy);
+                displayMap(worldMap, dx - 1, dy - 1);
 
+            } else if(dy > GRID1_Y && dx <= GRID2_X && dx != 0 && dy != DISPLAY_SIZE_Y - 1 && dy != GRID1_Y + 1) {
+                displayPlayer(player, dx - 1, dy - 1);
+            } else if(dy > 0 && dy <= GRID3_Y && dx > GRID1_X && dx != DISPLAY_SIZE_X - 1 && dx != GRID1_X + 1) {
+                printf(" ");
+            } else if (dx > GRID1_X + 1 && dy > GRID3_Y + 1 && dy != DISPLAY_SIZE_Y - 1 && dx != DISPLAY_SIZE_X - 1) {
+                displayLogs(dx, dy);
             } else {
-                printf(".");
+                printf("x");
             }
         }
         putchar('\n');

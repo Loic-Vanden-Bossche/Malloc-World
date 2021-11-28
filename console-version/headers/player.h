@@ -7,6 +7,7 @@
 
 #include "stdlib.h"
 #include "stdio.h"
+#include <math.h>
 #include "item.h"
 #include "craft.h"
 
@@ -36,5 +37,9 @@ void displayPlayerInventory(item* inventory);
 int addItem(int itemId, item playerInventory[10]);
 
 int deleteItem(int itemId, item playerInventory[10]);
+
+int calculateMaxHp(int lvl);
+
+float getLvlProgression(int xp, int currentLvl);
 
 #endif //MALLOC_WORLD_PLAYER_H
