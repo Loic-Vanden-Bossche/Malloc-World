@@ -97,14 +97,58 @@ void printCrafts(item inventory[10], int zone) {
     for (int id = 1; id <= 25; ++id) {
         const craft* data = getCraftDataById(id);
 
-        if(isInZone(data->availableZones, zone) || zone == -1) {
-            printf("%d - ", id);
-            printCraftData(data, inventory);
+        if(data != NULL) {
+            if(isInZone(data->availableZones, zone) || zone == -1) {
+                printf("%d - ", id);
+                printCraftData(data, inventory);
+            }
         }
     }
 }
 
-void craftItem(int id, item* inventory) {
+int selectCraftMenu(item inventory[10], int zone) {
+
+    printCrafts(inventory, zone);
+    printf("a - Quitter\n");
+
+    int craftId;
+
+    while(1) {
+
+        craftId = 0;
+
+        fflush(stdin);
+        scanf("%d", &craftId);
+
+        switch(craftId) {
+            case 0:
+                return 0;
+            default:
+                for (int id = 1; id <= 25; ++id) {
+                    const craft* data = getCraftDataById(id);
+                    if(data != NULL) {
+                        if(isInZone(data->availableZones, zone) || zone == -1) {
+
+                            if(craftId == data->id) {
+                                switch (craftItem(data->id, inventory)) {
+                                    case 0:
+                                        return data->id;
+                                    case -1:
+                                        printf("Vous n'avez plus de place dans l'inventaire\n");
+                                    case -2:
+                                        printf("Vous n'avez pas des ressources necessaires\n");
+                                }
+                            };
+                        }
+                    }
+                }
+        }
+    }
+
+    return 0;
+}
+
+int craftItem(int id, item* inventory) {
 
     const craft* data = getCraftDataById(id);
 
@@ -116,6 +160,12 @@ void craftItem(int id, item* inventory) {
                     deleteItem(data->ingredient[i].id, inventory);
                 }
             }
+
+            return 0;
         }
+
+        return -1;
     }
+
+    return -2;
 }

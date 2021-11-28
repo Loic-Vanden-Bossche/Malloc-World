@@ -18,7 +18,7 @@ typedef struct Craft {
 
 void showCraftLvl (int zone);
 
-void craftItem(int craftId, item* inventory);
+int craftItem(int id, item* inventory);
 
 craft* getCraftData(int Zone);
 
@@ -26,5 +26,12 @@ void printCraftDataById(int id, item inventory[10]);
 
 void isCratable(int id);
 
+int selectCraftMenu(item inventory[10], int zone);
+
 void printCrafts(item inventory[10], int zone);
+
+const craft* getCraftDataById(int id);
+
+
+
 #endif //MALLOC_WORLD_CRAFT_H

@@ -71,6 +71,26 @@ int deleteItem(int itemId, item playerInventory[10]) {
     return -1;
 }
 
+int repairItems(item inventory[10]) {
+
+    int repaired = 0;
+
+    for (int i = 0; i < 10; ++i) {
+        const itemData* data = getItemData(inventory[i].id);
+
+        if(data != NULL) {
+            if(data->type == WEAPON || data->type == TOOL) {
+                if(inventory[i].durabitity < data->maxDurability) {
+                    inventory[i].durabitity = data->maxDurability;
+                    repaired++;
+                }
+            }
+        }
+    }
+
+    return repaired;
+}
+
 player* createPlayer() {
 
     player *newPlayer = malloc(sizeof(player));
@@ -88,9 +108,6 @@ player* createPlayer() {
 
     for (int itemId = 1; itemId <= 4; ++itemId)
         addItem(itemId, newPlayer->inventory);
-
-    applyXp(newPlayer, 80);
-    applyHp(newPlayer, 80);
 
     return newPlayer;
 }

@@ -43,4 +43,6 @@ float getLvlProgression(int xp, int currentLvl);
 
 int calculateXpForNextLvl(int lvl);
 
+int repairItems(item inventory[10]);
+
 #endif //MALLOC_WORLD_PLAYER_H
