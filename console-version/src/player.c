@@ -155,7 +155,7 @@ int calculateXpForNextLvl(int lvl) {
 
     int baseXp = BASE_PLAYER_XP;
 
-    for (int i = 0; i < lvl; ++i) {
+    for (int i = 1; i < lvl; ++i) {
         baseXp *= 2;
     }
 

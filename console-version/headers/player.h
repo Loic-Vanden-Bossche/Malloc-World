@@ -42,4 +42,6 @@ int calculateMaxHp(int lvl);
 
 float getLvlProgression(int xp, int currentLvl);
 
+int calculateXpForNextLvl(int lvl);
+
 #endif //MALLOC_WORLD_PLAYER_H

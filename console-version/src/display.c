@@ -157,18 +157,23 @@ void displayPlayer(player* player, int dx, int dy) {
         }
     }
 
-    putchar(playerDisplay[dy - GRID1_Y][dx]);
+    sprintf(playerDisplay[5], "| NIVEAU %d | VIE : %d/%d | XP : %d/%d |", player->lvl, player->hp, player->maxHp, player->xp,
+            calculateXpForNextLvl(player->lvl));
+
+    char toPrint = playerDisplay[dy - GRID1_Y][dx];
+
+    toPrint != '\0' ? putchar(toPrint) : putchar(' ');
 }
 
 void displayLogs(int dx, int dy) {
 
-    char toPrint = 0;
+    char toPrint;
 
     for (int i = 0; i < 4; ++i) {
         if(dy == DISPLAY_SIZE_Y - 2*(i+1)) {
             if(getLogAtIndex(i) != NULL) {
                 toPrint = getLogAtIndex(i)[dx - GRID1_X - 2];
-                if (toPrint != '\n' && toPrint != '\0') {
+                if (toPrint != '\0') {
                     putchar(toPrint);
                     return;
                 }
@@ -190,11 +195,11 @@ void display(map* worldMap, player* player) {
             } else if(dy > GRID1_Y && dx <= GRID2_X && dx != 0 && dy != DISPLAY_SIZE_Y - 1 && dy != GRID1_Y + 1) {
                 displayPlayer(player, dx - 1, dy - 1);
             } else if(dy > 0 && dy <= GRID3_Y && dx > GRID1_X && dx != DISPLAY_SIZE_X - 1 && dx != GRID1_X + 1) {
-                printf(" ");
+                putchar(' ');
             } else if (dx > GRID1_X + 1 && dy > GRID3_Y + 1 && dy != DISPLAY_SIZE_Y - 1 && dx != DISPLAY_SIZE_X - 1) {
                 displayLogs(dx, dy);
             } else {
-                printf("x");
+                putchar('x');
             }
         }
         putchar('\n');
