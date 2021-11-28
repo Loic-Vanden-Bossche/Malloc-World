@@ -9,7 +9,6 @@
 #include "stdio.h"
 
 void setUnicode();
-void displayGrid(int** grid);
 void displayMap(map* worldMap);
 
 #endif //MALLOC_WORLD_DISPLAY_H

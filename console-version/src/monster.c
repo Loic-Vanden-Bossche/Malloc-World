@@ -206,7 +206,7 @@ void fightMonster(int monsterId, player* player) {
     if(monsterData == NULL) return;
 
     int monsterHp = monsterData->maxHp;
-    
+
     const itemData* equippedWeapon = getBestWeapon(player->inventory);
 
     if(equippedWeapon == NULL) {

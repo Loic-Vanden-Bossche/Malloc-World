@@ -4,18 +4,54 @@
 
 #include "../headers/display.h"
 
+#define DISPLAY_SIZE_X 150
+#define DISPLAY_SIZE_Y 40
+
+#define DISPLAY_MAP_SIZE_X 50
+#define DISPLAY_MAP_SIZE_Y 20
+
+
 int isUnicode = 0;
 
 void setUnicode() {
     isUnicode = 1;
 }
 
-void displayGrid(int** grid) {
+void getMapDisplayOffsetParams(coordinate playerPos, int* sXParam, int* sYParam, int* eXParam, int* eYParam) {
+
+    if(playerPos.x < DISPLAY_MAP_SIZE_X/2) {
+        *sXParam = 0;
+        *eXParam = DISPLAY_MAP_SIZE_X;
+    } else if (playerPos.x > MAP_SIZE_X - (DISPLAY_MAP_SIZE_X/2)) {
+        *sXParam = MAP_SIZE_X - DISPLAY_MAP_SIZE_X;
+        *eXParam = MAP_SIZE_X;
+    } else {
+        *sXParam = playerPos.x - (DISPLAY_MAP_SIZE_X/2);
+        *eXParam = playerPos.x + (DISPLAY_MAP_SIZE_X/2);
+    }
+
+    if(playerPos.y < DISPLAY_MAP_SIZE_Y/2) {
+        *sYParam = 0;
+        *eYParam = DISPLAY_MAP_SIZE_Y;
+    } else if (playerPos.y > MAP_SIZE_Y - (DISPLAY_MAP_SIZE_Y/2)) {
+        *sYParam = MAP_SIZE_Y - DISPLAY_MAP_SIZE_Y;
+        *eYParam = MAP_SIZE_Y;
+    } else {
+        *sYParam = playerPos.y - (DISPLAY_MAP_SIZE_Y/2);
+        *eYParam = playerPos.y + (DISPLAY_MAP_SIZE_Y/2);
+    }
+}
+
+void displayGrid(int** grid, coordinate playerPos) {
+
+    int sXParam, sYParam, eXParam, eYParam;
+
+    getMapDisplayOffsetParams(playerPos, &sXParam, &sYParam, &eXParam, &eYParam);
 
     int xi, yi;
-    for(yi=0; yi<MAP_SIZE_Y; yi++)
+    for(yi=sYParam; yi<eYParam; yi++)
     {
-        for(xi=0; xi<MAP_SIZE_X; xi++)
+        for(xi=sXParam; xi<eXParam; xi++)
         {
             switch(grid[yi][xi]) {
                 case TILE_WALL: isUnicode ? printf("\uE191") : putchar('#'); break;
@@ -45,5 +81,5 @@ void displayGrid(int** grid) {
 
 void displayMap(map* worldMap) {
 
-    displayGrid(worldMap->lvl[worldMap->currentLvl]);
+    displayGrid(worldMap->lvl[worldMap->currentLvl], worldMap->currentCoords);
 }
