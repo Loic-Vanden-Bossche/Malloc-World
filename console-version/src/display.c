@@ -17,28 +17,22 @@ void setUnicode() {
     isUnicode = 1;
 }
 
-void getMapDisplayOffsetParams(coordinate playerPos, int* sXParam, int* sYParam, int* eXParam, int* eYParam) {
+void getMapDisplayOffsetParams(coordinate playerPos, int* sXParam, int* sYParam) {
 
     if(playerPos.x < DISPLAY_MAP_SIZE_X/2) {
         *sXParam = 0;
-        *eXParam = DISPLAY_MAP_SIZE_X;
     } else if (playerPos.x > MAP_SIZE_X - (DISPLAY_MAP_SIZE_X/2)) {
         *sXParam = MAP_SIZE_X - DISPLAY_MAP_SIZE_X - 1;
-        *eXParam = MAP_SIZE_X;
     } else {
         *sXParam = playerPos.x - (DISPLAY_MAP_SIZE_X/2);
-        *eXParam = playerPos.x + (DISPLAY_MAP_SIZE_X/2);
     }
 
     if(playerPos.y < DISPLAY_MAP_SIZE_Y/2) {
         *sYParam = 0;
-        *eYParam = DISPLAY_MAP_SIZE_Y;
     } else if (playerPos.y > MAP_SIZE_Y - (DISPLAY_MAP_SIZE_Y/2)) {
         *sYParam = MAP_SIZE_Y - DISPLAY_MAP_SIZE_Y - 1;
-        *eYParam = MAP_SIZE_Y;
     } else {
         *sYParam = playerPos.y - (DISPLAY_MAP_SIZE_Y/2);
-        *eYParam = playerPos.y + (DISPLAY_MAP_SIZE_Y/2);
     }
 }
 
@@ -67,17 +61,20 @@ void displayGridCoords(int** grid, coordinate coords) {
     }
 }
 
-void display(map* worldMap) {
+void displayMap(map* worldMap, int dx, int dy) {
+    int sXParam, sYParam;
 
-    int sXParam, sYParam, eXParam, eYParam;
+    getMapDisplayOffsetParams(worldMap->currentCoords, &sXParam, &sYParam);
+    displayGridCoords(worldMap->lvl[worldMap->currentLvl], (coordinate){ sXParam + dx, sYParam + dy });
+}
 
-    getMapDisplayOffsetParams(worldMap->currentCoords, &sXParam, &sYParam, &eXParam, &eYParam);
+void display(map* worldMap, player* player) {
 
     for (int dy = 0; dy < DISPLAY_SIZE_Y; ++dy) {
         for (int dx = 0; dx < DISPLAY_SIZE_X; ++dx) {
             if(dy < DISPLAY_MAP_SIZE_Y && dx < DISPLAY_MAP_SIZE_X) {
 
-                displayGridCoords(worldMap->lvl[worldMap->currentLvl], (coordinate){ sXParam + dx, sYParam + dy });
+                displayMap(worldMap, dx, dy);
 
             } else {
                 printf(".");
@@ -87,6 +84,3 @@ void display(map* worldMap) {
     }
 }
 
-void displayMap(map* worldMap) {
-    display(worldMap);
-}

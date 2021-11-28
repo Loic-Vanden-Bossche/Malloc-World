@@ -106,6 +106,7 @@ int collectRessource(int ressourceId, item playerInventory[10], coordinate targe
 
 int interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
     debug("This element is a monster !!\n");
+    debug("This element is a monster !!\n");
 
     fightMonster(monsterId - 12, player);
 }
@@ -138,7 +139,7 @@ void processContextAction(int contextAction, coordinate targetCoordinates,map* w
         }
     }
 
-    displayMap(worldMap);
+    display(worldMap, player);
 }
 
 int game(map* worldMap, player* player, storageNode* storage) {
