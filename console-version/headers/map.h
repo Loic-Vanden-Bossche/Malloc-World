@@ -47,6 +47,7 @@ int setCurrentCoordinate(map* worldMap, coordinate targetCoordinates);
 
 const mapElement* getMapElementById(int id);
 
+void setCurrentLvl(map* worldMap, int lvl,int upOrDown);
 #include "map-generator.h"
 
 #endif //MALLOC_WORLD_MAP_H

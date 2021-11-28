@@ -151,7 +151,7 @@ void drawBars(char playerDisplay[GRID2_Y][GRID2_X], player* player,int x,int y) 
     }
 }
 
-void displayPlayer(player* player, int dx, int dy) {
+void displayPlayer(player* player,int worldLvl, int dx, int dy) {
 
     char playerDisplay[GRID2_Y][GRID2_X];
 
@@ -165,6 +165,8 @@ void displayPlayer(player* player, int dx, int dy) {
 
     sprintf(playerDisplay[5], "| NIVEAU %d | VIE : %d/%d | XP : %d/%d |", player->lvl, player->hp, player->maxHp, player->xp,
             calculateXpForNextLvl(player->lvl));
+
+    sprintf(playerDisplay[7], "| NIVEAU DE LA CARTE : %d |", worldLvl + 1);
 
     char toPrint = playerDisplay[dy - GRID1_Y][dx];
 
@@ -235,6 +237,8 @@ void displayLogs(int dx, int dy) {
 
 void display(map* worldMap, player* player) {
 
+    clrscr();
+
     for (int dy = 0; dy < DISPLAY_SIZE_Y; ++dy) {
         for (int dx = 0; dx < DISPLAY_SIZE_X; ++dx) {
             if(dy <= GRID1_Y && dx <= GRID1_X && dy != 0 && dx != 0) {
@@ -242,7 +246,7 @@ void display(map* worldMap, player* player) {
                 displayMap(worldMap, dx - 1, dy - 1);
 
             } else if(dy > GRID1_Y && dx <= GRID2_X && dx != 0 && dy != DISPLAY_SIZE_Y - 1 && dy != GRID1_Y + 1) {
-                displayPlayer(player, dx - 1, dy - 1);
+                displayPlayer(player, worldMap->currentLvl , dx - 1, dy - 1);
             } else if(dy > 0 && dy <= GRID3_Y && dx > GRID1_X && dx != DISPLAY_SIZE_X - 1 && dx != GRID1_X + 1) {
                 displayInventory(player->inventory, dx, dy);
             } else if (dx > GRID1_X + 1 && dy > GRID3_Y + 1 && dy != DISPLAY_SIZE_Y - 1 && dx != DISPLAY_SIZE_X - 1) {
