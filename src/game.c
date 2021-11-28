@@ -92,40 +92,70 @@ int collectRessource(int ressourceId, item playerInventory[10], coordinate targe
 
         if(tool != NULL) {
             if(tool->durabitity > 0) {
-                debug("You picked up this\n");
-                mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
-                tool->durabitity--;
+
+                switch(addItem(data->id, playerInventory)) {
+                    case 0:
+                        addLog("%s recolte", data->name);
+                        mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
+                        tool->durabitity--;
+                        break;
+                    case -2:
+                        addLog("Votre inventaire est plein");
+                        break;
+                }
+                
             } else {
-                debug("Your tool is broken !!\n");
+                addLog("votre outil est casse");
             }
+        } else {
+            addLog("il vous manque l'outil");
         }
     }
-
-    displayPlayerInventory(playerInventory);
 }
 
 int interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
-    debug("This element is a monster !!\n");
     debug("This element is a monster !!\n");
 
     fightMonster(monsterId - 12, player);
 }
 
+void interactPortal(map* worldMap, player* player, int portalValue) {
+
+    switch (worldMap->currentLvl) {
+        case 0:
+            if(player->lvl >= 3) {
+                setCurrentLvl(worldMap, 1, 1);
+            } else {
+                addLog("Le niveau 2 te sera accessible au niv 3");
+            }
+            break;
+        case 1:
+            if(portalValue == -2) {
+                setCurrentLvl(worldMap, 0, 0);
+            } else if (portalValue == -3) {
+
+                if(player->lvl >= 7) {
+                    setCurrentLvl(worldMap, 2, 1);
+                } else {
+                    addLog("Le niveau 3 te sera accessible au niv 7");
+                }
+            }
+            break;
+
+        case 2:
+            setCurrentLvl(worldMap, 1, 0);
+            break;
+    }
+}
 
 void processContextAction(int contextAction, coordinate targetCoordinates,map* worldMap,player* player) {
 
     const mapElement* elem = getMapElementById(contextAction);
 
     if(elem != NULL) {
-
-        debug("%d\n", elem->value);
-
         switch (elem->type) {
             case WALL:
-                debug("Destination is blocked\n");
-                break;
-            case FLOOR:
-                debug("Player moved successfully\n");
+                addLog("La destination est bloque");
                 break;
             case RESSOURCE:
                 collectRessource(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
@@ -133,6 +163,8 @@ void processContextAction(int contextAction, coordinate targetCoordinates,map* w
             case MONSTER:
                 interactMonster(elem->value, player, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);
                 break;
+            case PORTAL:
+                interactPortal(worldMap, player, elem->value);
             default:
                 debug("Action : %d\n", contextAction);
                 break;

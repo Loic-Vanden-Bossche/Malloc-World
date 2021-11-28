@@ -6,24 +6,24 @@ on:
       - '**'
 
 jobs:
-  windows-console-version:
+  windows:
 
     runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
       - name: configure
-        run: cmake ./console-version -B "./console-version/cmake-build-debug" -G "MinGW Makefiles"
+        run: cmake -B "./cmake-build-debug" -G "MinGW Makefiles"
       - name: build
-        run: cmake --build ./console-version/cmake-build-debug/ --target all
+        run: cmake --build ./cmake-build-debug/ --target all
 
-  linux-console-version:
+  linux:
 
     runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
       - name: configure
-        run: cmake ./console-version -B "./console-version/cmake-build-debug" -G "Unix Makefiles"
+        run: cmake -B "./cmake-build-debug" -G "Unix Makefiles"
       - name: build
-        run: cmake --build ./console-version/cmake-build-debug/ --target all
+        run: cmake --build ./cmake-build-debug/ --target all

@@ -130,6 +130,19 @@ int elementIsInLvl(mapElement element, int targetLvl) {
     return 0;
 }
 
+void setCurrentLvl(map* worldMap, int lvl,int upOrDown) {
+
+    if(lvl < 0 || lvl > 3) return;
+
+    worldMap->currentLvl = lvl;
+
+    if(upOrDown) {
+        setCurrentCoordinate(worldMap, (coordinate){2, 1});
+    } else {
+        setCurrentCoordinate(worldMap, (coordinate){MAP_SIZE_X - 2, MAP_SIZE_Y - 1});
+    }
+}
+
 map *createMap(int startLvl) {
 
     map *newMap = malloc(sizeof(map));
