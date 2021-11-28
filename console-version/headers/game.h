@@ -14,7 +14,6 @@
 #include "craft.h"
 #include "monster.h"
 
-void display(map* worldMap, player* player, storageNode* storage);
 int mainMenu();
 int displayConfirm(char* message);
 int newGame();

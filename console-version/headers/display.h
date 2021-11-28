@@ -6,10 +6,19 @@
 #define MALLOC_WORLD_DISPLAY_H
 
 #include "map.h"
+#include "player.h"
 #include "stdio.h"
 
+typedef struct LogNode {
+
+    char log[50];
+    struct LogNode* next;
+} logNode;
+
 void setUnicode();
-void displayGrid(int** grid);
-void displayMap(map* worldMap);
+void display(map* worldMap, player* player);
+
+void logPushFront(char message[50]);
+void printLogs();
 
 #endif //MALLOC_WORLD_DISPLAY_H

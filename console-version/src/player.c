@@ -5,7 +5,8 @@
 #include "../headers/player.h"
 
 int const MAX_ITEM_STACK = 20;
-int const MAX_PLAYER_HP = 100;
+int const BASE_PLAYER_HP = 100;
+int const BASE_PLAYER_XP = 100;
 
 int addItem(int itemId, item playerInventory[10]) {
 
@@ -75,8 +76,8 @@ player* createPlayer() {
     player *newPlayer = malloc(sizeof(player));
 
     newPlayer->lvl = 1;
-    newPlayer->hp = MAX_PLAYER_HP;
-    newPlayer->maxHp = MAX_PLAYER_HP;
+    newPlayer->hp = BASE_PLAYER_HP;
+    newPlayer->maxHp = BASE_PLAYER_HP;
     newPlayer->xp = 0;
 
     for (int i = 0; i < 10; ++i) {
@@ -87,6 +88,9 @@ player* createPlayer() {
 
     for (int itemId = 1; itemId <= 4; ++itemId)
         addItem(itemId, newPlayer->inventory);
+
+    applyXp(newPlayer, 80);
+    applyHp(newPlayer, 80);
 
     return newPlayer;
 }
@@ -125,11 +129,53 @@ void applyHp(player *player, int hp){
     }
 }
 
+float getLvlFromXp(int xp) {
+
+    return (float)xp/BASE_PLAYER_XP;
+}
+
+float getLvlProgression(int xp, int currentLvl) {
+    return getLvlFromXp(xp) - (currentLvl - 1);
+}
+
 void applyXp(player *player, int xp){
 
     if(xp >= 0){
-        player->xp = xp;
+        player->xp += xp;
+
+        float lvl = roundf(getLvlFromXp(player->xp));
+
+        if(player->lvl != lvl) {
+            applyLvl(player, lvl);
+        }
     }
+}
+
+int calculateXpForNextLvl(int lvl) {
+
+    int baseXp = BASE_PLAYER_XP;
+
+    for (int i = 1; i < lvl; ++i) {
+        baseXp *= 2;
+    }
+
+    return baseXp;
+}
+
+int calculateMaxHp(int lvl){
+
+    int maxHp = 100;
+
+    for (int i = 1; i <= 10; ++i) {
+
+        if(lvl == i) return maxHp;
+
+        if(i >= 6 && i < 8) maxHp += 50;
+        else if(i == 8 || i == 9) maxHp += 75;
+        else maxHp += (10*i);
+    }
+
+    return 0;
 }
 
 void applyLvl(player *player, int lvl) {
