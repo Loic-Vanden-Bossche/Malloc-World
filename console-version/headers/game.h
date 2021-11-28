@@ -20,4 +20,6 @@ int displayConfirm(char* message);
 int newGame();
 int continueGame();
 
+int getInput();
+
 #endif //MALLOC_WORLD_GAME_H

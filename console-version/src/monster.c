@@ -153,3 +153,88 @@ const char* getRandomBossName() {
 
     return randomBossName[getRandomNumber(0, 20)];
 }
+
+int fightMenu() {
+
+    printf("1 - Frapper\n");
+    printf("2 - Utiliser une potion\n");
+    printf("3 - Equiper une autre arme\n");
+
+    char ch;
+
+    while(1) {
+
+        fflush(stdin);
+        ch = getchar();
+
+        switch(ch) {
+            case '1' ... '3':
+                return ch - '0';
+        }
+    }
+}
+
+const itemData* getBestWeapon(item inventory[10]) {
+    const itemData* weaponRef = NULL;
+
+    for (int i = 0; i < 10; ++i) {
+        const itemData* data = getItemData(inventory[i].id);
+
+        if(data != NULL) {
+            if(data->type == WEAPON) {
+                if(weaponRef != NULL) {
+                    if(weaponRef->damages < data->damages) weaponRef = data;
+                } else {
+                    weaponRef = data;
+                }
+            }
+        }
+    }
+
+    return weaponRef;
+}
+
+void applyDamages(int* hp, int damages) {
+
+    *hp = ((*hp - damages) < 0) ? 0 : *hp - damages;
+}
+
+void fightMonster(int monsterId, player* player) {
+
+    const monster* monsterData = getMonsterById(monsterId);
+
+    if(monsterData == NULL) return;
+
+    int monsterHp = monsterData->maxHp;
+    
+    const itemData* equippedWeapon = getBestWeapon(player->inventory);
+
+    if(equippedWeapon == NULL) {
+        debug("Vous n'avez aucune arme !!\n Vous ne pouvez pas combattre !!\n");
+        return;
+    }
+
+    debug("Vous combattez le monstre : %s de niveau %d\n", monsterData->name, monsterData->lvl);
+    debug("Votre arme est : %s\n", equippedWeapon->name);
+
+    while(monsterHp > 0 && player->hp > 0) {
+
+        switch(fightMenu()){
+            case 1:
+                debug("Vous infligez %d de dégâts au monstre !!\n", equippedWeapon->damages);
+                applyDamages(&monsterHp, equippedWeapon->damages);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+
+        debug("Le monstre attaque !!\n");
+
+        debug("Le monstre vous a infligé %d de dégâts !!\n", monsterData->damages);
+        applyDamages(&player->hp, monsterData->damages);
+
+        debug("PHP : %d | MHP : %d\n", player->hp, monsterHp);
+    }
+}

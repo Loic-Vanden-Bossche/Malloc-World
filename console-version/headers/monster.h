@@ -6,6 +6,7 @@
 #define MALLOC_WORLD_MONSTER_H
 
 #include "./map-generator.h"
+#include "player.h"
 
 typedef struct Monster {
     int id;
@@ -18,5 +19,7 @@ typedef struct Monster {
 void generateMonsters();
 
 void displayMonsters();
+
+void fightMonster(int monsterId, player* player);
 
 #endif //MALLOC_WORLD_MONSTER_H
