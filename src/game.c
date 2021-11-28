@@ -138,10 +138,26 @@ int collectRessource(int ressourceId, item playerInventory[10], coordinate targe
     }
 }
 
-int interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
+void interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
     debug("This element is a monster !!\n");
 
-    fightMonster(monsterId - 12, player);
+    switch(fightMonster(monsterId - 12, player)){
+        case 0:
+            addLog("Vous etes mort");
+            break;
+        case 1:
+            addLog("Vous avez battu le monstre");
+            mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
+            addLog("Vous avez gagner %d xp", monsterId);
+            applyXp(player, monsterId);
+            break;
+        case -1:
+            addLog("Vous navez pas d'armes");
+            break;
+        case -2:
+            addLog("Vous fuyez");
+            break;
+    }
 }
 
 void interactPortal(map* worldMap, player* player, int portalValue) {

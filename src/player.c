@@ -139,11 +139,20 @@ void displayPlayerInfos(player* player){
     displayPlayerInventory(player->inventory);
 }
 
-void applyHp(player *player, int hp){
+int applyHp(player *player, int hp){
 
-    if(hp <= player->maxHp && hp >= 0){
-        player->hp = hp;
+    if(hp >= 0){
+        player->hp += hp;
+
+        if(player->hp > player->maxHp) {
+            int diff = player->maxHp - player->hp;
+            player->hp = player->maxHp;
+
+            return diff;
+        }
     }
+
+    return hp;
 }
 
 float getLvlFromXp(int xp) {

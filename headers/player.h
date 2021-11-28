@@ -25,7 +25,7 @@ void destroyPlayer();
 
 void applyLvl(player *player, int lvl);
 
-void applyHp(player *player, int hp);
+int applyHp(player *player, int hp);
 
 void applyXp(player *player, int xp);
 

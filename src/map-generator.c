@@ -249,37 +249,46 @@ int getElementFromType(mapElementType type, int lvl){
     }
 }
 
-void populateMap(int** grid, int lvl, float fillProb) {
+void placeElement(int** grid, int elem) {
 
     coordinate coords;
     pathFindResult pRes;
+
     int isBlocked;
+
+    do {
+
+        pRes.solved = P_NOT_FOUND;
+        pRes.path = NULL;
+
+        coords = getRandomCoordinate();
+        isBlocked = grid[coords.y][coords.x] != 0;
+
+        if(!isBlocked) {
+
+            grid[coords.y][coords.x] = elem;
+            pRes = solveAStar(grid, 1, 1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
+            destroyPair(pRes.path);
+
+            if(pRes.solved != P_FOUND) {
+                grid[coords.y][coords.x] = 0;
+            }
+        }
+
+    } while(isBlocked || pRes.solved != P_FOUND);
+}
+
+void populateMap(int** grid, int lvl, float fillProb) {
+
     mapElementType type;
     const int totalElements = ((MAP_SIZE_X*MAP_SIZE_Y) * fillProb) * TOTAL_ELEMENTS_RT;
     int totalElementTypes[4] = {0};
 
     for (int i = 0; i < totalElements; ++i) {
 
-        do {
+        type = getRandomMapElementType();
 
-            pRes.solved = P_NOT_FOUND;
-            pRes.path = NULL;
-
-            coords = getRandomCoordinate();
-            isBlocked = grid[coords.y][coords.x] != 0;
-
-            if(!isBlocked) {
-                type = getRandomMapElementType();
-                grid[coords.y][coords.x] = getElementFromType(type, lvl);
-                pRes = solveAStar(grid, 1, 1, MAP_SIZE_X - 2, MAP_SIZE_Y - 2);
-                destroyPair(pRes.path);
-
-                if(pRes.solved != P_FOUND) {
-                    grid[coords.y][coords.x] = 0;
-                }
-            }
-
-        } while(isBlocked || pRes.solved != P_FOUND);
+        placeElement(grid, getElementFromType(type, lvl));
 
         switch (type) {
             case R_PLANT:
@@ -301,6 +310,8 @@ void populateMap(int** grid, int lvl, float fillProb) {
     debug("\t\t - Wood prob : %f\n", (float)totalElementTypes[1]/totalElements);
     debug("\t\t - Mineral prob : %f\n", (float)totalElementTypes[2]/totalElements);
     debug("\t\t - Monster prob : %f\n", (float)totalElementTypes[3]/totalElements);
+
+    placeElement(grid, 2);
 
     switch(lvl){
         case 0:

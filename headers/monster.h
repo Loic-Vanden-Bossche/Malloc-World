@@ -20,6 +20,6 @@ void generateMonsters();
 
 void displayMonsters();
 
-void fightMonster(int monsterId, player* player);
+int fightMonster(int monsterId, player* player);
 
 #endif //MALLOC_WORLD_MONSTER_H
