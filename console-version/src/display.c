@@ -34,11 +34,17 @@ void getBlankLog(char log[50]) {
     }
 }
 
-void logPushFront(char message[50]) {
+void addLog( const char * format, ... ) {
+
+    char message[50] = {' '};
+    char fMessage[50] = {' '};
+
+    va_list args;
+    va_start(args, format);
+    vsprintf(message, format, args);
+    va_end(args);
 
     logNode* new_node = (logNode*) malloc(sizeof(logNode));
-
-    char fMessage[50] = {' '};
 
     sprintf(fMessage, "- %s", message);
 

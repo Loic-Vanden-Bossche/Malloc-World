@@ -92,16 +92,25 @@ int collectRessource(int ressourceId, item playerInventory[10], coordinate targe
 
         if(tool != NULL) {
             if(tool->durabitity > 0) {
-                debug("You picked up this\n");
-                mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
-                tool->durabitity--;
+
+                switch(addItem(data->id, playerInventory)) {
+                    case 0:
+                        addLog("%s recolte", data->name);
+                        mapGrid[targetCoordinates.y][targetCoordinates.x] = 0;
+                        tool->durabitity--;
+                        break;
+                    case -2:
+                        addLog("Votre inventaire est plein");
+                        break;
+                }
+                
             } else {
-                debug("Your tool is broken !!\n");
+                addLog("votre outil est casse");
             }
+        } else {
+            addLog("il vous manque l'outil");
         }
     }
-
-    displayPlayerInventory(playerInventory);
 }
 
 int interactMonster(int monsterId, player* player, coordinate targetCoordinates, int** mapGrid ) {
@@ -122,10 +131,10 @@ void processContextAction(int contextAction, coordinate targetCoordinates,map* w
 
         switch (elem->type) {
             case WALL:
-                debug("Destination is blocked\n");
+                addLog("La destination est bloque");
                 break;
             case FLOOR:
-                debug("Player moved successfully\n");
+                addLog("Deplacement reussi");
                 break;
             case RESSOURCE:
                 collectRessource(elem->value, player->inventory, targetCoordinates, worldMap->lvl[worldMap->currentLvl]);

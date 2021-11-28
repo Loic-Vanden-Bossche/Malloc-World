@@ -18,7 +18,7 @@ typedef struct LogNode {
 void setUnicode();
 void display(map* worldMap, player* player);
 
-void logPushFront(char message[50]);
+void addLog( const char * format, ... );
 void printLogs();
 
 #endif //MALLOC_WORLD_DISPLAY_H
