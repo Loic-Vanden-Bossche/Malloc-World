@@ -165,6 +165,49 @@ void displayPlayer(player* player, int dx, int dy) {
     toPrint != '\0' ? putchar(toPrint) : putchar(' ');
 }
 
+void displayInventory(item inventory[10], int dx, int dy) {
+    char inventoryDisplay[GRID3_Y][GRID3_X];
+
+    for (int i = 0; i < GRID3_Y; ++i) {
+        for (int j = 0; j < GRID3_X; ++j) {
+            inventoryDisplay[i][j] = ' ';
+        }
+    }
+
+    int displayedLines = 0;
+
+    for (int i = 0; i < 10; ++i) {
+        const itemData* item =  getItemData(inventory[i].id);
+        if(item != NULL && displayedLines != GRID3_Y) {
+            sprintf(inventoryDisplay[displayedLines++], " %d - %s", i + 1, item->name);
+            switch (item->type) {
+                case WEAPON:
+                    sprintf(inventoryDisplay[displayedLines++], "     - Degats : %d", item->damages);
+                    sprintf(inventoryDisplay[displayedLines++], "     - Durabilite : %d", inventory[i].durabitity);
+                    break;
+                case CRAFTING:
+                    sprintf(inventoryDisplay[displayedLines++], "     - Quantite : %d", inventory[i].qty);
+                    break;
+                case TOOL:
+                    sprintf(inventoryDisplay[displayedLines++], "     - Durabilite : %d", inventory[i].durabitity);
+                    break;
+                case ARMOR:
+                    sprintf(inventoryDisplay[displayedLines++], "     - Taux de protection : %f", item->pRate);
+                    break;
+                case HEAL:
+                    sprintf(inventoryDisplay[displayedLines++], "     - Points de vie restaurés : %d", item->healValue);
+                    break;
+            }
+
+            displayedLines++;
+        }
+    }
+
+    char toPrint = inventoryDisplay[dy - 1][dx - GRID1_X - 2];
+
+    toPrint != '\0' ? putchar(toPrint) : putchar(' ');
+}
+
 void displayLogs(int dx, int dy) {
 
     char toPrint;
@@ -195,7 +238,7 @@ void display(map* worldMap, player* player) {
             } else if(dy > GRID1_Y && dx <= GRID2_X && dx != 0 && dy != DISPLAY_SIZE_Y - 1 && dy != GRID1_Y + 1) {
                 displayPlayer(player, dx - 1, dy - 1);
             } else if(dy > 0 && dy <= GRID3_Y && dx > GRID1_X && dx != DISPLAY_SIZE_X - 1 && dx != GRID1_X + 1) {
-                putchar(' ');
+                displayInventory(player->inventory, dx, dy);
             } else if (dx > GRID1_X + 1 && dy > GRID3_Y + 1 && dy != DISPLAY_SIZE_Y - 1 && dx != DISPLAY_SIZE_X - 1) {
                 displayLogs(dx, dy);
             } else {
